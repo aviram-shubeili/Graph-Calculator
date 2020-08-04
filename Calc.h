@@ -75,9 +75,8 @@ public:
  *  * Check if name is a valid Graph name
  * @param g_name
  * @return
- * TODO
  * Exceptions:
- *
+ *      none
  */
     static bool isValidGraphName(const std::string &g_name);
 };

@@ -18,15 +18,7 @@ using std::shared_ptr;
 
 
 
-/**
- * TODO
- * @param line
- * @return
- */
-bool isValidQuit(string& line) {
-    //TODO:
-    return true;
-}
+
 int main(int argc, char* argv[]) {
 
     if(BATCH_MODE) {
