@@ -3,20 +3,9 @@
 //
 
 #include "GraphCalc.h"
-#include "Graph.h"
-#include <iostream>
-#include <map>
-#include <sstream>
-#include <fstream>
-#include <memory>
-#include "Calc.h"
-#define BATCH_MODE (argc == 3)
-#define SHELL_MODE (argc == 1)
-#define START_OF_LINE 0
-#define PRINT_LEN 6
-#define WITHOUT_COMPLEMENT 1
+#include "Auxiliaries.h"
 
-enum WorkMode {BATCH, SHELL};
+
 using std::istream;
 using std::ostream;
 using std::ifstream;
@@ -27,25 +16,7 @@ using std::cout;
 using std::string;
 using std::shared_ptr;
 
-const char* kClose = ")";
 
-bool startsWith(const string& line,const string& starter);
-
-void startCalc(istream &input, ostream &output, WorkMode mode);
-
-string & ltrim(string &str);
-
-string & rtrim(string &str);
-
-string & trim(string &str);
-void printWho(ostream &output);
-
-void reset();
-
-
-int findBinOperPos(const string &str, char& oper);
-
-bool isBinaryOper(char c);
 
 /**
  * TODO
@@ -58,13 +29,8 @@ bool isValidQuit(string& line) {
 }
 int main(int argc, char* argv[]) {
 
-
-
-
-
-
     if(BATCH_MODE) {
-        // TODO: is slicing??
+        // TODO is slicing??
         ifstream temp_input(argv[1]);
         ofstream temp_output(argv[2]);
         if(!temp_input || !temp_output) {
@@ -80,11 +46,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-
-
     return 0;
-
-
 
 }
 
@@ -95,9 +57,9 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
     if(mode == SHELL) {
         output << "Gcalc>";
     }
-    // TODO: exceptions catch
+    // TODO : exceptions catch
     while(std::getline(input, current_line) ) {
-        ltrim(rtrim(current_line));
+        current_line = trim(current_line);
         // ****************** who ******************
         if(current_line == "who") {
             output << calc;
@@ -120,7 +82,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             }
             else {
                 to_print.pop_back();
-                // TODO if invalid expression --> need to catch an out_of_range exception
+                // TODO  if invalid expression --> need to catch an out_of_range exception
                 (calc.getGraph(to_print)).print();
             }
         }
@@ -134,7 +96,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             }
             dest_g = current_line.substr(0, end_of_dest);
             src_g = current_line.substr(end_of_dest + 1);
-            trim(src_g);
+            src_g = trim(src_g);
 
             // *** init a graph ***
             if(startsWith(src_g,"{")) {
@@ -200,30 +162,4 @@ bool isBinaryOper(char c) {
     return c == '+' or c == '-' or c == '^' or c == '*';
 }
 
-/**
- * TODO
- * @param name
- * @return
- * TODO Exceptions:
- *
- */
 
-
-bool startsWith(const string& line,const string& starter) {
-    return line.find(starter) == START_OF_LINE;
-}
-
-string & rtrim(string &str) {
-    for(string::reverse_iterator r_it = str.rbegin(); r_it != str.rend() ; r_it++) {
-
-    }
-
-}
-
-string & ltrim(string &str) {
-    return str;
-}
-
-string & trim(string &str) {
-    return ltrim(rtrim(str));
-}

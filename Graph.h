@@ -7,12 +7,12 @@
 #include <iostream>
 #include <set>
 #include <utility>
+#include "Auxiliaries.h"
 
 class Graph {
 private:
-    // TODO try catch!
     std::set<std::string> Vertices;
-    std::set<std::pair<std::string,std::string>> Edges; // todo: maybe map???
+    std::map<std::string,std::string> Edges;
 
 public:
     /**
@@ -24,7 +24,7 @@ public:
      *      IllegalVertexName() - if one of the vertices`s name is invalid.
      *      std::bad_alloc() - if allocation problem
      */
-    Graph(const std::string& data);    //TODO:  should it be explicit?
+    Graph(const std::string& data);    //TODO :  should it be explicit?
     /**
      *
      * @param other
@@ -35,7 +35,7 @@ public:
      *  Exceptions:
      *       std::bad_alloc() - if allocation problem
      */
-    Graph(const Graph& other);    //TODO:  should it be explicit?
+    Graph(const Graph& other);    //TODO :  should it be explicit?
 
     /**
      * Assignment operator - current graph will be overridden
@@ -53,7 +53,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator+(const Graph& g2) const;
-    //TODO: bi-direction operator +
+    //TODO : bi-direction operator +
 
     /**
      * create an intersection of 2 graphs
@@ -63,7 +63,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator^(const Graph& g2) const;
-    // TODO: bi-direction operator ^
+    // TODO : bi-direction operator ^
 
     /**
      * creates the difference of this graph and g2
@@ -73,7 +73,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator-(const Graph& g2) const;
-    //TODO: bi-direction operator -
+    //TODO : bi-direction operator -
 
     /**
      *  creates the product of 2 graphs
@@ -83,7 +83,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator*(const Graph& g2) const;
-    //TODO: bi-direction operator *
+    //TODO : bi-direction operator *
 
     /**
      * complement of graph
@@ -96,7 +96,7 @@ public:
     /**
      * prints to stdout the Graph according to demands.
      * Exceptions:
-     * TODO: ?
+     * TODO : ?
      */
     void print() const;
 
