@@ -1,0 +1,8 @@
+//
+// Created by avira on 03/08/2020.
+//
+
+#ifndef MTM_FINALPROJECT_GRAPHCALC_H
+#define MTM_FINALPROJECT_GRAPHCALC_H
+
+#endif //MTM_FINALPROJECT_GRAPHCALC_H
