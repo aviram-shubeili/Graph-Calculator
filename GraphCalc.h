@@ -18,7 +18,6 @@
 #define START_OF_LINE 0
 #define PRINT_LEN 6
 #define WITHOUT_COMPLEMENT 1
-const char* kClose = ")";
 
 /**
  * This function is the Calculator's driver after the workmode is defined.

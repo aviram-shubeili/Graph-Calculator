@@ -9,10 +9,11 @@
 #include <utility>
 #include "Auxiliaries.h"
 
+typedef  std::pair<std::string, std::string>  pairs;
 class Graph {
 private:
-    std::set<std::string> Vertices;
-    std::map<std::string,std::string> Edges;
+    std::set<std::string> vertices;
+    std::set<pairs> edges;
 
 public:
     /**
@@ -44,6 +45,11 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph& operator=(const Graph& other);
+
+    /**
+     * Default D'or.
+     */
+    ~Graph() = default;
 
     /**
      *  union of 2 graphs
@@ -98,13 +104,14 @@ public:
      * Exceptions:
      * TODO : ?
      */
-    void print() const;
+    void print(std::ostream &output = std::cout) const;
 
     /**
      * add a vertex to the graph
      * @param vertex
      *  Exceptions:
      *       IllegalVertexName() - if vertex name is invalid.
+     *       VertexAlreadyExists() - if vertex already exists in the graph.
      *       std::bad_alloc() - if allocation problem
      */
     void addVertex(std::string& vertex);
@@ -112,12 +119,43 @@ public:
      * add an edge to the graph between existing vertices.
      * @param src
      * @param dest
+     * Exceptions:
+     *       VertexNotExist() - if one of the vertices doesnt exist in the graph.
+     *       SelfLoop() - if user tries to add a self loop.
+     *       EdgeAlreadyExists() - if user tries to add parallel Edges
+     *       std::bad_alloc() - if allocation problem
+     */
+    void addEdge(std::string& src, std::string& dest);
+
+    /**
+     * given a string of all the vertices, this function will add all vertices to the dst set
+     * @param s_vertices
+     *  Exceptions:
+     *       IllegalVertexName() - if vertex name is invalid.
+     *       VertexAlreadyExists() - if vertex already exists in the graph.
+     *       std::bad_alloc() - if allocation problem
+     */
+    void addAllVertices(const std::string &s_vertices, std::set<std::string> &dst_set);
+
+    /**
+     * given a string of all the Edges, this function will add all edges to the dst map
+     * @param s_edges
+     * Exceptions:
      *       IllegalVertexName() - if one of the vertices`s name is invalid.
      *       std::bad_alloc() - if allocation problem
      *       VertexNotExist() - if one of the vertices doesnt exist in the graph.
+     *       EdgeAlreadyExists() - if user tries to add parallel Edges
+     *       SelfLoop() - if user tries to add a self loop.
      */
-    void addEdge(std::string& src, std::string& dest);
+    void addAllEdges(const std::string &s_edges, std::set<pairs> &dst_set);
 };
+
+/**
+ * Check if name is a valid Vertex name
+ * @param name
+ * @return
+ */
+static bool isValidVertexName(const std::string &name);
 
 
 #endif //MTM_FINALPROJECT_GRAPH_H

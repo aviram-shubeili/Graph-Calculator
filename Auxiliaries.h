@@ -20,19 +20,15 @@
 
 enum WorkMode {BATCH, SHELL};
 
-typedef void func_t();
-typedef std::map<std::string, func_t*> strfmap_t;
+// TODO add to saved words ?
+const std::set<std::string> SAVED_WORDS = {
+        "quit",
+        "who",
+        "print",
+        "reset",
+        "delete",
 
-
-
-const strfmap_t func_map=
-        {
-                {"reset", reset},
-                {"who", printWho}
-        };
-
-template<class Application>
-void execute(Application func);
+};
 
 
 /**

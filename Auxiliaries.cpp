@@ -29,6 +29,9 @@ std::string rtrim(std::string &str) {
 }
 
 std::string ltrim(std::string &str) {
+    if(str == "") {
+        return str;
+    }
     std::string ltrimmed_str(str);
     for(char c : str) {
         if(isspace(c)) {

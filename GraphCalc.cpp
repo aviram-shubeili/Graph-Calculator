@@ -4,7 +4,7 @@
 
 #include "GraphCalc.h"
 #include "Auxiliaries.h"
-
+#include "Calc.h"
 
 using std::istream;
 using std::ostream;
@@ -30,11 +30,11 @@ bool isValidQuit(string& line) {
 int main(int argc, char* argv[]) {
 
     if(BATCH_MODE) {
-        // TODO is slicing??
         ifstream temp_input(argv[1]);
         ofstream temp_output(argv[2]);
         if(!temp_input || !temp_output) {
-            // TODO cant open file!
+            // FATAL ERROR - couldnt open file
+            throw OpenFileError();
         }
         startCalc(temp_input, temp_output, BATCH);
     }
@@ -42,8 +42,8 @@ int main(int argc, char* argv[]) {
         startCalc(cin, cout, SHELL);
     }
     else {
-        // TODO: argc > 3 --> FATAL ERROR!!!!
-        return 0;
+        // FATAL ERROR - tried to run with 1 or more than 2 arguments.
+        throw RunError();
     }
 
     return 0;
@@ -57,83 +57,99 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
     if(mode == SHELL) {
         output << "Gcalc>";
     }
-    // TODO : exceptions catch
-    while(std::getline(input, current_line) ) {
-        current_line = trim(current_line);
-        // ****************** who ******************
-        if(current_line == "who") {
-            output << calc;
-        }
-            // ****************** resetting ******************
-        else if(current_line == "reset") {
-            calc.reset();
-        }
-            // ****************** quitting ******************
-        else if(current_line == "quit") {
-            break;
-        }
+    while (std::getline(input, current_line)) {
+        try {
+            current_line = trim(current_line);
+            // ****************** who ******************
+            if (current_line == "who") {
+                output << calc;
+            }
+                // ****************** resetting ******************
+            else if (current_line == "reset") {
+                calc.reset();
+            }
+                // ****************** quitting ******************
+            else if (current_line == "quit") {
+                break;
+            }
 
-            // ****************** printing ******************
-        else if(startsWith(current_line,"print(")) {
-            string to_print = current_line.substr(PRINT_LEN);
-            // doesnt end with )
-            if(to_print.substr(to_print.length()-1) != kClose) {
-                // TODO ERROR: print doesnt end with ).
-            }
-            else {
-                to_print.pop_back();
-                // TODO  if invalid expression --> need to catch an out_of_range exception
-                (calc.getGraph(to_print)).print();
-            }
-        }
-            // ******************* starts with a Graph Name ************
-        else {
-            string dest_g;
-            string src_g;
-            int end_of_dest = current_line.find("=");
-            if(end_of_dest == string::npos) {
-                // ERROR: no command.
-            }
-            dest_g = current_line.substr(0, end_of_dest);
-            src_g = current_line.substr(end_of_dest + 1);
-            src_g = trim(src_g);
-
-            // *** init a graph ***
-            if(startsWith(src_g,"{")) {
-                // TODO: exception may be thrown from Graph or from Calc
-                calc.addGraph(dest_g,Graph(src_g));
-            }
-            // !Graph
-            if(startsWith(src_g,"!")) {
-                // TODO exception from Calc!
-                calc.addGraph(dest_g,calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
-
-            }
-                // g1 <oper> g2
-            else {
-                string g1, g2;
-                char oper;
-                // TODO catch Exception from findoperpos....!
-                int op_pos = findBinOperPos(src_g, oper);
-                // there is no operand
-                if(op_pos == string::npos) {
-                    calc.addGraph(dest_g,calc.getGraph(src_g));
+                // ****************** printing ******************
+            else if (startsWith(current_line, "print(")) {
+                string to_print = current_line.substr(PRINT_LEN);
+                // doesnt end with )
+                if (to_print.substr(to_print.length() - 1) != ")") {
+                    throw CommandNotInFormat();
                 }
-                    // there is an operand
                 else {
-                    g1 = src_g.substr(START_OF_LINE,op_pos);
-                    g2 = src_g.substr(op_pos+1);
-                    // TODO Exceptions
-                    calc.addGraph(dest_g, calc.applyOper(g1, oper, g2));
+                    // deleting ')' character
+                    to_print.pop_back();
+                    (calc.getGraph(to_print)).print(output);
+                }
+            }
+                // ******************* starts with a Graph Name ************
+            else {
+                string dest_g;
+                string src_g;
+                int end_of_dest = current_line.find("=");
+                if (end_of_dest == string::npos) {
+                    throw NoAssignmentOp();
+                }
+                dest_g = current_line.substr(0, end_of_dest);
+                src_g = current_line.substr(end_of_dest + 1);
+                src_g = trim(src_g);
+
+                // *** init a graph ***
+                if (startsWith(src_g, "{")) {
+                    calc.addGraph(dest_g, Graph(src_g));
+                }
+                // !Graph
+                else if (startsWith(src_g, "!")) {
+                    calc.addGraph(dest_g, calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
+
+                }
+                    // g1 <oper> g2
+                else {
+                    string g1, g2;
+                    char oper;
+                    int op_pos = findBinOperPos(src_g, oper);
+                    // there is no operand
+                    if (op_pos == string::npos) {
+                        calc.addGraph(dest_g, calc.getGraph(src_g));
+                    }
+                        // there is an operand
+                    else {
+                        g1 = src_g.substr(START_OF_LINE, op_pos);
+                        g2 = src_g.substr(op_pos + 1);
+                        calc.addGraph(dest_g, calc.applyOper(g1, oper, g2));
+                    }
+
                 }
 
             }
 
+            if (mode == SHELL) {
+                output << "Gcalc>";
+            }
         }
+    catch (CommandNotInFormat& e) {
+        output << e.what();
+    }
+    catch (std::out_of_range& e) {
+        output << "Error: Graph not found. \n";
+    }
+    catch (NoAssignmentOp& e) {
+        output << e.what();
+    }
+    catch (InvalidGraphName& e) {
+        output << e.what();
+    }
+    catch (GraphExceptions& e) {
+        output << e.what();
+    }
+    catch(...) {
+        cout << "Unknown Error Occurred";
+    }
 
-        if(mode == SHELL) {
-            output << "Gcalc>";
-        }
     }
 }
 /**
@@ -145,15 +161,16 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
  *      InvalidGraphName() if operand pos = 0
  */
 int findBinOperPos(const string &str, char& oper) {
-    int pos;
+    int pos = string::npos;
     for(char c : str) {
         if(isBinaryOper(c)) {
             pos = str.find(c);
+            oper = c;
             break;
         }
     }
     if(pos == START_OF_LINE) {
-        // TODO throw InvalidGraphName();
+        throw InvalidGraphName();
     }
     return pos;
 }

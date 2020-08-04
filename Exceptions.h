@@ -10,5 +10,9 @@ class Exceptions : public std::exception{
 
 };
 
+class RunError : public Exceptions {};
+
+class OpenFileError : public Exceptions {};
+
 
 #endif //MTM_FINALPROJECT_EXCEPTIONS_H

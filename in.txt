@@ -1,4 +1,3 @@
-adad
-ssss
-quitt
-quit
+g6 = { [x],| }
+print(g6)
+who
