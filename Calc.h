@@ -21,9 +21,9 @@ public:
      * @param g
      * TODO
      * Exceptions:
-     *
+     *      InvalidGraphName()
      */
-    void addGraph(std::string g_name, Graph& g);
+    void addGraph(std::string g_name, Graph g);
     /**
      * if graph Exists in memory return a copy of it, if not - exception will be thrown
      *
@@ -38,6 +38,19 @@ public:
      * reset the graph map
      */
     void reset();
+
+    /**
+     * receives 2 graph names and an oper and apply the operad on them
+     * @param g1_name
+     * @param oper
+     * @param g2_name
+     * @return the result of the oper
+     * TODO
+     * Exceptions:
+     *      out_of_range() if one of the graphs not exist
+     *      std::bad_alloc() if alloc problem
+     */
+    Graph applyOper(const std::string& g1_name, const char oper, const std::string& g2_name) const;
 
     /**
      * print to os the names of all graphs known to Calc.

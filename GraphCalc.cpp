@@ -14,7 +14,7 @@
 #define SHELL_MODE (argc == 1)
 #define START_OF_LINE 0
 #define PRINT_LEN 6
-
+#define WITHOUT_COMPLEMENT 1
 
 enum WorkMode {BATCH, SHELL};
 using std::istream;
@@ -28,16 +28,24 @@ using std::string;
 using std::shared_ptr;
 
 const char* kClose = ")";
+
+bool startsWith(const string& line,const string& starter);
+
 void startCalc(istream &input, ostream &output, WorkMode mode);
 
 string & ltrim(string &str);
 
 string & rtrim(string &str);
 
+string & trim(string &str);
 void printWho(ostream &output);
 
 void reset();
 
+
+int findBinOperPos(const string &str, char& oper);
+
+bool isBinaryOper(char c);
 
 /**
  * TODO
@@ -104,7 +112,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
         }
 
             // ****************** printing ******************
-        else if(current_line.find("print(") == START_OF_LINE) {
+        else if(startsWith(current_line,"print(")) {
             string to_print = current_line.substr(PRINT_LEN);
             // doesnt end with )
             if(to_print.substr(to_print.length()-1) != kClose) {
@@ -119,18 +127,79 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             // ******************* starts with a Graph Name ************
         else {
             string dest_g;
-            string rest;
-            int end = current_line.find("=");
-            if(end == string::npos) {
+            string src_g;
+            int end_of_dest = current_line.find("=");
+            if(end_of_dest == string::npos) {
                 // ERROR: no command.
             }
-            dest_g = current_line.substr(0,end);
-            rest = current_line.substr(end+1);
+            dest_g = current_line.substr(0, end_of_dest);
+            src_g = current_line.substr(end_of_dest + 1);
+            trim(src_g);
+
+            // *** init a graph ***
+            if(startsWith(src_g,"{")) {
+                // TODO: exception may be thrown from Graph or from Calc
+                calc.addGraph(dest_g,Graph(src_g));
+            }
+            // !Graph
+            if(startsWith(src_g,"!")) {
+                // TODO exception from Calc!
+                calc.addGraph(dest_g,calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
+
+            }
+                // g1 <oper> g2
+            else {
+                string g1, g2;
+                char oper;
+                // TODO catch Exception from findoperpos....!
+                int op_pos = findBinOperPos(src_g, oper);
+                // there is no operand
+                if(op_pos == string::npos) {
+                    calc.addGraph(dest_g,calc.getGraph(src_g));
+                }
+                    // there is an operand
+                else {
+                    g1 = src_g.substr(START_OF_LINE,op_pos);
+                    g2 = src_g.substr(op_pos+1);
+                    // TODO Exceptions
+                    calc.addGraph(dest_g, calc.applyOper(g1, oper, g2));
+                }
+
+            }
 
         }
-        output << "Gcalc>" ;
+
+        if(mode == SHELL) {
+            output << "Gcalc>";
+        }
     }
 }
+/**
+ * returns the position of the first operand in str and stores it in operand
+ * @param str
+ * @param operand
+ * @return
+ * Exceptions:
+ *      InvalidGraphName() if operand pos = 0
+ */
+int findBinOperPos(const string &str, char& oper) {
+    int pos;
+    for(char c : str) {
+        if(isBinaryOper(c)) {
+            pos = str.find(c);
+            break;
+        }
+    }
+    if(pos == START_OF_LINE) {
+        // TODO throw InvalidGraphName();
+    }
+    return pos;
+}
+
+bool isBinaryOper(char c) {
+    return c == '+' or c == '-' or c == '^' or c == '*';
+}
+
 /**
  * TODO
  * @param name
@@ -140,12 +209,21 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
  */
 
 
-
+bool startsWith(const string& line,const string& starter) {
+    return line.find(starter) == START_OF_LINE;
+}
 
 string & rtrim(string &str) {
-    return str;
+    for(string::reverse_iterator r_it = str.rbegin(); r_it != str.rend() ; r_it++) {
+
+    }
+
 }
 
 string & ltrim(string &str) {
     return str;
+}
+
+string & trim(string &str) {
+    return ltrim(rtrim(str));
 }

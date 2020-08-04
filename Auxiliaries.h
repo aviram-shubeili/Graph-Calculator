@@ -11,7 +11,7 @@
 #include <memory>
 #include <set>
 #include <utility>
-
+#include <assert.h>
 
 typedef void func_t();
 typedef std::map<std::string, func_t*> strfmap_t;
