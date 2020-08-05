@@ -201,6 +201,7 @@ void Graph::addEdge(std::string &src, std::string &dest) {
 void Graph::addAllVertices(const string &s_vertices, std::set<std::string> &dst_set) {
     string cur_vertex;
     bool ended_prop = true;
+    bool was_sep = false;
     for(char c : s_vertices) {
         if(c == ',') {
             cur_vertex = trim(cur_vertex);
@@ -271,10 +272,16 @@ void Graph::addAllEdges(const string &s_edges, std::set<pairs> &dst_set) {
             }
         }
     }
+    if(inside) {
+        throw InvalidGraphData();
+    }
 }
 
 // TODO
 bool isValidVertexName(const string &name) {
+    if(name.empty()) {
+        return false;
+    }
     int num_open = 0;
     for(char c : name) {
         if(c == '[') {

@@ -66,3 +66,9 @@ bool Calc::isValidGraphName(const std::string &g_name) {
     return true;
 
 }
+
+void Calc::erase(std::string to_delete) {
+    if(saved_graphs.erase(to_delete) == 0) {
+        throw GraphNotFound();
+    }
+}

@@ -17,6 +17,7 @@
 #define SHELL_MODE (argc == 1)
 #define START_OF_LINE 0
 #define PRINT_LEN 6
+#define DELETE_LEN 7
 #define WITHOUT_COMPLEMENT 1
 
 /**

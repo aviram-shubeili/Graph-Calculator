@@ -25,8 +25,8 @@ int main(int argc, char* argv[]) {
         ifstream temp_input(argv[1]);
         ofstream temp_output(argv[2]);
         if(!temp_input || !temp_output) {
-            // FATAL ERROR - couldnt open file
-            throw OpenFileError();
+            // FATAL ERROR
+            std::cerr << OpenFileError().what();
         }
         startCalc(temp_input, temp_output, BATCH);
     }
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     }
     else {
         // FATAL ERROR - tried to run with 1 or more than 2 arguments.
-        throw RunError();
+        std::cerr << RunError().what();
     }
 
     return 0;
@@ -76,6 +76,19 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                     // deleting ')' character
                     to_print.pop_back();
                     (calc.getGraph(to_print)).print(output);
+                }
+            }
+                // ****************** deleting ******************
+            else if (startsWith(current_line, "delete(")) {
+                string to_delete = current_line.substr(DELETE_LEN);
+                // doesnt end with )
+                if (to_delete.substr(to_delete.length() - 1) != ")") {
+                    throw CommandNotInFormat();
+                }
+                else {
+                    // deleting ')' character
+                    to_delete.pop_back();
+                    calc.erase(to_delete);
                 }
             }
                 // ******************* starts with a Graph Name ************
@@ -119,9 +132,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
 
             }
 
-            if (mode == SHELL) {
-                output << "Gcalc>";
-            }
+
         }
     catch (CommandNotInFormat& e) {
         output << e.what();
@@ -139,8 +150,11 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
         output << e.what();
     }
     catch(...) {
-        cout << "Unknown Error Occurred";
+        cout << "   Unknown Error Occurred";
     }
+        if (mode == SHELL) {
+            output << "Gcalc>";
+        }
 
     }
 }

@@ -10,9 +10,15 @@ class Exceptions : public std::exception{
 
 };
 
-class RunError : public Exceptions {};
+class RunError : public Exceptions {
+public:
+    const char *what() const noexcept override;
+};
 
-class OpenFileError : public Exceptions {};
+class OpenFileError : public Exceptions {
+public:
+    const char *what() const noexcept override;
+};
 
 
 #endif //MTM_FINALPROJECT_EXCEPTIONS_H

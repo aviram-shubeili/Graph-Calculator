@@ -3,3 +3,11 @@
 //
 
 #include "Exceptions.h"
+
+const char *OpenFileError::what() const noexcept {
+    return "FATAL Error - Unable to open file.";
+}
+
+const char *RunError::what() const noexcept {
+    return "FATAL Error - Illegal use of calculator";
+}

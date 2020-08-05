@@ -26,5 +26,10 @@ public:
     const char *what() const noexcept override;
 };
 
+class GraphNotFound : public CalcExceptions {
+public:
+    const char *what() const noexcept override;
+};
+
 #endif //MTM_FINALPROJECT_CALCEXCEPTIONS_H
 

@@ -52,6 +52,12 @@ public:
     void reset();
 
     /**
+     * This deletes a graph from the saved graphs
+     * Exceptions:
+     *      GraphNotFound() - if graph is not in saved in calc.
+     */
+    void erase(std::string to_delete);
+    /**
      * receives 2 graph names and an oper and apply the operad on them
      * @param g1_name
      * @param oper
