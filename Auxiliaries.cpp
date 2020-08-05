@@ -15,6 +15,9 @@ bool endsWith(const std::string& line, const std::string& ender) {
 }
 
 std::string rtrim(std::string &str) {
+    if(str.empty()) {
+        return str;
+    }
     std::string rtrimmed_str(str);
    for(int i = str.length() - 1 ; i != -1 ; i--) {
        if(isspace(str[i])) {
@@ -29,7 +32,7 @@ std::string rtrim(std::string &str) {
 }
 
 std::string ltrim(std::string &str) {
-    if(str == "") {
+    if(str.empty()) {
         return str;
     }
     std::string ltrimmed_str(str);

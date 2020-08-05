@@ -1,3 +1,2 @@
-g6 = { [x],| }
-print(g6)
-who
+g1 = { x1, x2 }
+print(g1)

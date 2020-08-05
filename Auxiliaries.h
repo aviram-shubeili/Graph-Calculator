@@ -13,6 +13,7 @@
 #include <utility>
 #include <assert.h>
 #include <algorithm>
+#include <iterator>
 #include "Graph.h"
 #include "Calc.h"
 #include "GraphExceptions.h"

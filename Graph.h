@@ -155,7 +155,8 @@ public:
  * @param name
  * @return
  */
-static bool isValidVertexName(const std::string &name);
+bool isValidVertexName(const std::string &name);
 
+std::string buildProductVertex(std::string vertex_1,std::string vertex_2);
 
 #endif //MTM_FINALPROJECT_GRAPH_H

@@ -96,7 +96,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 }
                 // !Graph
                 else if (startsWith(src_g, "!")) {
-                    calc.addGraph(dest_g, calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
+                    calc.addGraph(dest_g, !calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
 
                 }
                     // g1 <oper> g2

@@ -13,3 +13,29 @@ print(g5)
 print(g6)
 who
 
+
+g2 = { y1, y2 | <y1,y2> , <y2,y1> }
+g3 = { x1, x2 |  <x2,x1> }
+g4 = { x1, x2 | }
+g5 = { y1, y2, y3 | <y1,y2> , <y2,y1>, <y3,y1> }
+oneANDtwo = g1 + g2
+who
+print(oneANDtwo)
+
+g3 = { x1, x2 |  <x2,x1> }
+g4 = { x1, x2 | }
+g5 = { y1, y2, y3 | <y1,y2> , <y2,y1>, <y3,y1> }
+print(g1)
+print(g2)
+print(g3)
+print(g4)
+print(g5)
+
+
+g3 = { x1, x2 |  <x2,x1> }
+g4 = { x1, x2 | }
+g5 = { y1, y2, y3 | <y1,y2> , <y2,y1>, <y3,y1> }
+oneANDtwo = g1 + g2
+oneANDthree = g1 + g3
+fourANDthree = g4 + g3
+fourANDone = g4 + g1

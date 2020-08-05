@@ -10,20 +10,33 @@ Graph::Graph(const std::string &data) {
 
     // TODO fix so | is optional in a graph with no edges
 
-    // data is not at the format of { .. | .. }
-    if(not (startsWith(data, "{") and (data.find('|') != string::npos) and endsWith(data, "}")) ) {
+    // data is not at the format of { ..  .. }
+    if(not (startsWith(data, "{") and endsWith(data, "}")) ) {
         throw InvalidGraphData();
     }
-    string s_vertices = data.substr(1,data.find('|') - 1);
-
-    // s_edges may contain another '|'
-    string s_edges = data.substr(data.find('|') + 1);
-
+    size_t end_of_vertices = data.find('|');
+    string s_vertices;
+    string s_edges;
+    s_vertices = data.substr(1,end_of_vertices - 1);
+    if( end_of_vertices != string::npos) {
+        // s_edges may contain another '|'
+        s_edges = data.substr(end_of_vertices + 1);
     // remove the '}' char.
+
     s_edges.pop_back();
+    }
+    else {
+        // remove the '}' char.
+    s_vertices.pop_back();
+    }
+
+
+
 
     addAllVertices(trim(s_vertices), vertices);
+    if(not s_edges.empty()){
     addAllEdges(trim(s_edges), edges);
+    }
 }
 
 Graph::Graph(const Graph &other) : vertices(other.vertices), edges(other.edges) {}
@@ -40,25 +53,109 @@ Graph& Graph::operator=(const Graph &other) {
 
 
 Graph Graph::operator+(const Graph &g2) const {
-    return Graph("");
+    Graph result = *this;
+    result.vertices.insert(g2.vertices.begin(),g2.vertices.end());
+    result.edges.insert(g2.edges.begin(), g2.edges.end());
+    return result;
 }
 
 
 
 Graph Graph::operator^(const Graph &g2) const {
-    return Graph("");
+    Graph result("{ | }");
+
+    std::set_intersection(vertices.begin(),vertices.end(),
+                          g2.vertices.begin(), g2.vertices.end(),
+                          std::inserter(result.vertices,result.vertices.begin()));
+
+    std::set_intersection(edges.begin(),edges.end(),
+                          g2.edges.begin(), g2.edges.end(),
+                          std::inserter(result.edges,result.edges.begin()));
+
+    return result;
 }
 
 Graph Graph::operator-(const Graph &g2) const {
-    return Graph("");
+    Graph result("{ | }");
+    std::set_difference(vertices.begin(),vertices.end(),
+                        g2.vertices.begin(),g2.vertices.end(),
+                        std::inserter(result.vertices,result.vertices.begin()));
+
+    for(pairs edge : edges) {
+        try {
+            result.addEdge(edge.first,edge.second);
+        }
+        catch (VertexNotExist& e) {
+            continue;
+        }
+        catch(Exceptions& e) {
+            // Should never Happen!
+            assert(false);
+        }
+    }
+    return result;
 }
 
 Graph Graph::operator*(const Graph &g2) const {
-    return Graph("");
+    Graph result("{ | }");
+
+    // Adding the product Vertices
+    for(const string& vertex_1 : vertices) {
+        for(const string& vertex_2 : g2.vertices) {
+            string prod_vertex = buildProductVertex(vertex_1,vertex_2);
+            result.addVertex(prod_vertex);
+        }
+    }
+    // Adding the product Edges
+    for(const pairs& edge_1 : edges) {
+        for(const pairs& edge_2 : g2.edges) {
+            string src_1 = edge_1.first;
+            string src_2 = edge_2.first;
+            string dst_1 = edge_1.second;
+            string dst_2 = edge_2.second;
+            string prod_src = buildProductVertex(src_1,src_2);
+            string prod_dst = buildProductVertex(dst_1,dst_2);
+            try {
+                result.addEdge(prod_src, prod_dst);
+            }
+            catch (GraphExceptions& e) {
+                // Should never Get Here!
+                assert(false);
+            }
+        }
+    }
+
+    return result;
 }
 
 Graph Graph::operator!() const {
-    return Graph("");
+    // Creating the Full simple Graph.
+    Graph full_simple_graph("{ | }");
+    // Vertices
+    full_simple_graph.vertices = vertices;
+
+    std::set<string>::const_iterator src_it = vertices.begin();
+    std::set<string>::const_iterator dst_it = vertices.begin();
+    std::set<string>::const_iterator end_it = vertices.end();
+    // Edges
+    for( ; src_it != end_it ; src_it++) {
+        for( dst_it = vertices.begin() ; dst_it != end_it ; dst_it++) {
+            if(*src_it != *dst_it) {
+                string tmp_src = *src_it;
+                string tmp_dst = *dst_it;
+                full_simple_graph.addEdge(tmp_src, tmp_dst);
+            }
+        }
+    }
+
+    // Creating the Complement Graph.
+    Graph result("{ | }");
+    result.vertices = vertices;
+    std::set_difference(full_simple_graph.edges.begin(),full_simple_graph.edges.end(),
+                        edges.begin(),edges.end(),
+                        std::inserter(result.edges,result.edges.begin()));
+
+    return result;
 }
 
 void Graph::print(std::ostream &output) const {
@@ -161,6 +258,7 @@ void Graph::addAllEdges(const string &s_edges, std::set<pairs> &dst_set) {
                 src = "";
                 dst = "";
                 sep_ok = false;
+                done_with_src = false;
             }
             else if(c == ',' ) {
                 done_with_src = true;
@@ -197,4 +295,11 @@ bool isValidVertexName(const string &name) {
         }
     }
     return num_open == 0;
+}
+
+string buildProductVertex(string vertex_1,string vertex_2) {
+    string prod_vertex = "[";
+    (prod_vertex += vertex_1 += ";") += vertex_2 += "]";
+
+    return prod_vertex;
 }
