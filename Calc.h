@@ -96,10 +96,24 @@ public:
      *      out_of_range() if one of the saved_graphs not exist
      *      OpenFileError()
      */
-    void save(std::string g_name, std::string file_name);
+    void save(const std::string &g_name, const std::string &file_name);
 
     /**
      * TODO
+     * @param file_name
+     * @return
+     * Exceptions:
+     *       InvalidFileName()
+     *       IllegalVertexName() - if vertex name is invalid.
+     *       VertexAlreadyExists() - if vertex already exists in the graph.
+     *       VertexNotExist() - if one of the vertices doesnt exist in the graph.
+     *       SelfLoop() - if user tries to add a self loop.
+     *       EdgeAlreadyExists() - if user tries to add parallel Edges
+     *       std::bad_alloc() - if allocation problem
+     */
+    Graph load(const std::string &file_name);
+    /**
+     * false if name contains a ',' true otherwise.
      * @param file_name
      * @return
      */
