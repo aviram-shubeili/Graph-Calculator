@@ -23,7 +23,7 @@ quit this shouldnt quit
 quit = { y1, y2 | <y1,y2> , <y2,y1> }
 delete = { y1, y2 | <y1,y2> , <y2,y1> }
 who = { y1, y2 | <y1,y2> , <y2,y1> }
-print = { y1, y2 | <y1,y2> , <y2,y1> }
+getString = { y1, y2 | <y1,y2> , <y2,y1> }
 reset = { y1, y2 | <y1,y2> , <y2,y1> }
 +g1 = g1
 *quit

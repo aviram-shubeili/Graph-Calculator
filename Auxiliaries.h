@@ -25,7 +25,7 @@ enum WorkMode {BATCH, SHELL};
 const std::set<std::string> SAVED_WORDS = {
         "quit",
         "who",
-        "print",
+        "getString",
         "reset",
         "delete",
 

@@ -70,21 +70,40 @@ public:
     Graph applyOper(const std::string& g1_name, const char oper, const std::string& g2_name) const;
 
     /**
-     * print to os the names of all saved_graphs known to Calc.
+     * getString to os the names of all saved_graphs known to Calc.
      * @param os
      * @param to_print
      * @return
      */
     friend std::ostream &operator<<(std::ostream &os, const Calc &to_print);
 
-/**
- *  * Check if name is a valid Graph name
- * @param g_name
- * @return
- * Exceptions:
- *      none
- */
+    /**
+     *  * Check if name is a valid Graph name
+     * @param g_name
+     * @return
+     * Exceptions:
+     *      none
+     */
     static bool isValidGraphName(const std::string &g_name);
+
+    /**
+     * TODO
+     * @param g_name
+     * @param file_name
+     * Exceptions:
+     *      InvalidGraphName()
+     *      InvalidFileName()
+     *      out_of_range() if one of the saved_graphs not exist
+     *      OpenFileError()
+     */
+    void save(std::string g_name, std::string file_name);
+
+    /**
+     * TODO
+     * @param file_name
+     * @return
+     */
+    static bool isValidFileName(const std::string &file_name);
 };
 
 

@@ -28,7 +28,7 @@ g5 = { y1, y2, y3 | <y1,y2> , <y2,y1>, <y3,y1> }
 print(g1)
 print(g2)
 print(g3)
-print(g4)
+getString(g4)
 print(g5)
 
 

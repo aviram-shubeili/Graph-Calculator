@@ -5,9 +5,9 @@
 #include "Exceptions.h"
 
 const char *OpenFileError::what() const noexcept {
-    return "FATAL Error - Unable to open file.";
+    return "Error: FATAL - Unable to open file.";
 }
 
 const char *RunError::what() const noexcept {
-    return "FATAL Error - Illegal use of calculator";
+    return "Error: FATAL - Illegal use of calculator";
 }

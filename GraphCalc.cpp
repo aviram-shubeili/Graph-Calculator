@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
         if(!temp_input || !temp_output) {
             // FATAL ERROR
             std::cerr << OpenFileError().what();
+            return 0;
         }
         startCalc(temp_input, temp_output, BATCH);
     }
@@ -36,6 +37,7 @@ int main(int argc, char* argv[]) {
     else {
         // FATAL ERROR - tried to run with 1 or more than 2 arguments.
         std::cerr << RunError().what();
+        return 0;
     }
 
     return 0;
@@ -66,7 +68,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             }
 
                 // ****************** printing ******************
-            else if (startsWith(current_line, "print(")) {
+            else if (startsWith(current_line, "getString(")) {
                 string to_print = current_line.substr(PRINT_LEN);
                 // doesnt end with )
                 if (to_print.substr(to_print.length() - 1) != ")") {
@@ -75,7 +77,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 else {
                     // deleting ')' character
                     to_print.pop_back();
-                    (calc.getGraph(to_print)).print(output);
+                    output << (calc.getGraph(to_print)).getString();
                 }
             }
                 // ****************** deleting ******************
@@ -95,7 +97,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             else {
                 string dest_g;
                 string src_g;
-                int end_of_dest = current_line.find("=");
+                size_t end_of_dest = current_line.find("=");
                 if (end_of_dest == string::npos) {
                     throw NoAssignmentOp();
                 }
@@ -107,7 +109,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 if (startsWith(src_g, "{")) {
                     calc.addGraph(dest_g, Graph(src_g));
                 }
-                // !Graph
+                    // !Graph
                 else if (startsWith(src_g, "!")) {
                     calc.addGraph(dest_g, !calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
 
@@ -116,7 +118,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 else {
                     string g1, g2;
                     char oper;
-                    int op_pos = findBinOperPos(src_g, oper);
+                    size_t op_pos = findBinOperPos(src_g, oper);
                     // there is no operand
                     if (op_pos == string::npos) {
                         calc.addGraph(dest_g, calc.getGraph(src_g));
@@ -134,24 +136,28 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
 
 
         }
-    catch (CommandNotInFormat& e) {
-        output << e.what();
-    }
-    catch (std::out_of_range& e) {
-        output << "Error: Graph not found. \n";
-    }
-    catch (NoAssignmentOp& e) {
-        output << e.what();
-    }
-    catch (InvalidGraphName& e) {
-        output << e.what();
-    }
-    catch (GraphExceptions& e) {
-        output << e.what();
-    }
-    catch(...) {
-        cout << "   Unknown Error Occurred";
-    }
+        catch (CommandNotInFormat& e) {
+            output << e.what();
+        }
+        catch (std::out_of_range& e) {
+            output << "Error: Graph not found. \n";
+        }
+        catch (NoAssignmentOp& e) {
+            output << e.what();
+        }
+        catch (InvalidGraphName& e) {
+            output << e.what();
+        }
+        catch (GraphExceptions& e) {
+            output << e.what();
+        }
+        catch (std::bad_alloc& e) {
+            std::cerr << "Error: FATAL - allocation failed." << std::endl;
+            break;
+        }
+        catch(...) {
+            cout << "Error: Unknown Error Occurred \n" ;
+        }
         if (mode == SHELL) {
             output << "Gcalc>";
         }
@@ -167,7 +173,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
  *      InvalidGraphName() if operand pos = 0
  */
 int findBinOperPos(const string &str, char& oper) {
-    int pos = string::npos;
+    size_t pos = string::npos;
     for(char c : str) {
         if(isBinaryOper(c)) {
             pos = str.find(c);

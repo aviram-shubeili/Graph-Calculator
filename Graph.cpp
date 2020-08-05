@@ -158,14 +158,16 @@ Graph Graph::operator!() const {
     return result;
 }
 
-void Graph::print(std::ostream &output) const {
+string Graph::getString() const {
+    string result;
     for(const string& vertex : vertices) {
-        output << vertex << std::endl;
+        (result += vertex) += "\n";
     }
-    output << "&" << std::endl;
+    result += "&\n";
     for(const pairs& edge : edges) {
-        output << edge.first << " " << edge.second << std::endl;
+        (((result +=edge.first) +=" ") += edge.second) += "\n";
     }
+    return result;
 }
 
 void Graph::addVertex(std::string &vertex) {
@@ -201,7 +203,6 @@ void Graph::addEdge(std::string &src, std::string &dest) {
 void Graph::addAllVertices(const string &s_vertices, std::set<std::string> &dst_set) {
     string cur_vertex;
     bool ended_prop = true;
-    bool was_sep = false;
     for(char c : s_vertices) {
         if(c == ',') {
             cur_vertex = trim(cur_vertex);
@@ -275,6 +276,14 @@ void Graph::addAllEdges(const string &s_edges, std::set<pairs> &dst_set) {
     if(inside) {
         throw InvalidGraphData();
     }
+}
+
+std::set<std::string> Graph::getVertices() {
+    return vertices;
+}
+
+std::set<pairs> Graph::getEdges() {
+    return edges;
 }
 
 // TODO

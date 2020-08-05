@@ -2,6 +2,7 @@
 // Created by avira on 03/08/2020.
 //
 
+#ifndef SWIG
 #ifndef MTM_FINALPROJECT_GRAPH_H
 #define MTM_FINALPROJECT_GRAPH_H
 #include <iostream>
@@ -16,6 +17,10 @@ private:
     std::set<pairs> edges;
 
 public:
+    /**
+     * Default constructor to an Empty Graph (used by python)
+     */
+    Graph() = default;
     /**
      * Create a Graph from a string : { **Vertices** | **Edges** }
      * @param data
@@ -102,9 +107,9 @@ public:
     /**
      * prints to stdout the Graph according to demands.
      * Exceptions:
-     * TODO : ?
+     *       std::bad_alloc() - if allocation problem
      */
-    void print(std::ostream &output = std::cout) const;
+    std::string getString() const;
 
     /**
      * add a vertex to the graph
@@ -148,6 +153,17 @@ public:
      *       SelfLoop() - if user tries to add a self loop.
      */
     void addAllEdges(const std::string &s_edges, std::set<pairs> &dst_set);
+    /**
+     * return a copy of vertices set
+     * @return
+     */
+    std::set<std::string> getVertices();
+
+    /**
+     * return a copy of edges set
+     * @return
+     */
+    std::set<pairs> getEdges();
 };
 
 /**
@@ -156,7 +172,13 @@ public:
  * @return
  */
 bool isValidVertexName(const std::string &name);
-
+/**
+ * TODO
+ * @param vertex_1
+ * @param vertex_2
+ * @return
+ */
 std::string buildProductVertex(std::string vertex_1,std::string vertex_2);
 
 #endif //MTM_FINALPROJECT_GRAPH_H
+#endif //SWIG

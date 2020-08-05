@@ -8,7 +8,7 @@
 
 void Calc::addGraph(std::string &g_name, Graph g) {
     g_name = trim(g_name);
-    if(!isValidGraphName(g_name)) {
+    if(not isValidGraphName(g_name)) {
         throw InvalidGraphName();
     }
     saved_graphs.insert({g_name, g});
@@ -71,4 +71,48 @@ void Calc::erase(std::string to_delete) {
     if(saved_graphs.erase(to_delete) == 0) {
         throw GraphNotFound();
     }
+}
+
+void Calc::save(std::string g_name, std::string file_name) {
+    if(not isValidGraphName(g_name)) {
+        throw InvalidGraphName();
+    }
+    if(not isValidFileName(file_name)) {
+        throw InvalidFileName();
+    }
+    Graph g = saved_graphs.at(g_name);
+    std::set<std::string> vertices = g.getVertices();
+    std::set<pairs> edges = g.getEdges();
+    unsigned int num_vertices = vertices.size();
+    unsigned int num_edges = edges.size();
+    std::ofstream outfile(file_name, std::ios_base::binary);
+    if(!outfile) {
+        throw OpenFileError();
+    }
+    outfile.write((const char*)&num_vertices, sizeof(unsigned int));
+    outfile.write((const char*)&num_edges, sizeof(unsigned int));
+    for(const std::string& vertex : vertices) {
+        unsigned int v_name_len = vertex.length()-1;
+        outfile.write((const char*)&v_name_len, sizeof(unsigned int));
+        outfile.write((const char*)&vertex, v_name_len);
+    }
+    for(const pairs& edge : edges) {
+        std::string v1 = edge.first;
+        std::string v2 = edge.second;
+        unsigned int v1_name_len = v1.length()-1;
+        unsigned int v2_name_len = v2.length()-1;
+        // saving src vertex
+        outfile.write((const char*)&v1_name_len, sizeof(unsigned int));
+        outfile.write((const char*)&v1, v1_name_len);
+        // saving dst vertex
+        outfile.write((const char*)&v2_name_len, sizeof(unsigned int));
+        outfile.write((const char*)&v2, v2_name_len);
+    }
+
+
+
+}
+
+bool Calc::isValidFileName(const std::string &file_name) {
+    return true;
 }
