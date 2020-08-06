@@ -44,6 +44,39 @@ int main(int argc, char* argv[]) {
     return 0;
 
 }
+Graph evaluate(std::string data, Calc &calc) {
+
+    for(size_t i = 0; i < data.length() ; i++ ) {
+
+        switch (data[i]) {
+            case PLUS:
+                return evaluate(data.substr(0, i), calc) +
+                       evaluate(data.substr(i + 1), calc);
+
+            case MINUS:
+                return evaluate(data.substr(0, i), calc) -
+                       evaluate(data.substr(i + 1), calc);
+
+
+            case MULT:
+                return evaluate(data.substr(0, i), calc) *
+                       evaluate(data.substr(i + 1), calc);
+
+            case INTER:
+                return evaluate(data.substr(0, i), calc) ^
+                       evaluate(data.substr(i + 1), calc);
+
+            case COMPL:
+                return !evaluate(data.substr(0, i), calc);
+
+        }
+    }
+    data = trim(data);
+    if(calc.saved_graphs.find(data) != calc.saved_graphs.end()) {
+        return calc.saved_graphs.at(data);
+    }
+    return Graph(data);
+}
 
 void startCalc(istream &input, ostream &output, WorkMode mode) {
 
@@ -78,7 +111,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 else {
                     // deleting ')' character
                     to_print.pop_back();
-                    output << (calc.getGraph(to_print)).getString();
+                    output << (evaluate(to_print,calc)).getString();
                 }
             }
                 // ****************** deleting ******************
@@ -120,7 +153,21 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 src_g = current_line.substr(end_of_dest + 1);
                 src_g = trim(src_g);
 
-                // loading a graph from binary file
+
+                calc.addGraph(dest_g, evaluate(src_g,calc));
+
+
+
+
+
+
+
+
+
+
+
+
+                // ********** loading a graph from binary file
                 if(startsWith(src_g,"load(")) {
                     string file_name = src_g.substr(LOAD_LEN);
                     if (file_name.substr(file_name.length() - 1) != ")") {
@@ -130,13 +177,14 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                         file_name.pop_back();
                         file_name = trim(file_name);
 
-                        calc.addGraph(dest_g,calc.load(file_name));
+                        calc.addGraph(dest_g, calc.load(file_name));
                     }
 
+
                 }
+                /*
                 // *** init a graph ***
                 else if (startsWith(src_g, "{")) {
-                    calc.addGraph(dest_g, Graph(src_g));
                 }
                     // !Graph
                 else if (startsWith(src_g, "!")) {
@@ -160,7 +208,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                     }
 
                 }
-
+*/
             }
 
 
