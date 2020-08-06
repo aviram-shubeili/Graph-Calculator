@@ -28,6 +28,8 @@ const std::set<std::string> SAVED_WORDS = {
         "getString",
         "reset",
         "delete",
+        "save",
+        "load"
 
 };
 

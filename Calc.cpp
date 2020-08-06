@@ -87,36 +87,35 @@ void Calc::save(const std::string &g_name, const std::string &file_name) {
     unsigned int num_edges = edges.size();
     std::ofstream outfile(file_name, std::ios_base::binary);
     if(!outfile) {
-        throw OpenFileError();
+        throw BinaryFileError();
     }
     outfile.write((const char*)&num_vertices, sizeof(unsigned int));
     outfile.write((const char*)&num_edges, sizeof(unsigned int));
     for(const std::string& vertex : vertices) {
-        unsigned int v_name_len = vertex.length()-1;
+        unsigned int v_name_len = vertex.length();
         outfile.write((const char*)&v_name_len, sizeof(unsigned int));
-        outfile.write((const char*)&vertex, v_name_len);
+        outfile.write(vertex.c_str(), v_name_len);
     }
     for(const pairs& edge : edges) {
         std::string v1 = edge.first;
         std::string v2 = edge.second;
-        unsigned int v1_name_len = v1.length()-1;
-        unsigned int v2_name_len = v2.length()-1;
+        unsigned int v1_name_len = v1.length();
+        unsigned int v2_name_len = v2.length();
         // saving src vertex
         outfile.write((const char*)&v1_name_len, sizeof(unsigned int));
-        outfile.write((const char*)&v1, v1_name_len);
+        outfile.write(v1.c_str(), v1_name_len);
         // saving dst vertex
         outfile.write((const char*)&v2_name_len, sizeof(unsigned int));
-        outfile.write((const char*)&v2, v2_name_len);
+        outfile.write(v2.c_str(), v2_name_len);
     }
 }
-// TODO
 Graph Calc::load(const std::string &file_name) {
     if(not isValidFileName(file_name)) {
         throw InvalidFileName();
     }
     std::ifstream infile(file_name, std::ios_base::binary);
     if(!infile) {
-        throw OpenFileError();
+        throw BinaryFileError();
     }
     Graph result;
     unsigned int num_vertices;
@@ -124,25 +123,28 @@ Graph Calc::load(const std::string &file_name) {
     infile.read((char*)&num_vertices, sizeof(unsigned int));
     infile.read((char*)&num_edges, sizeof(unsigned int));
     // reading vertices
-    for(int i = 0 ; i < num_vertices ; i++) {
+    for(unsigned int i = 0 ; i < num_vertices ; i++) {
         unsigned int vertex_len;
         std::string vertex;
         infile.read((char*)&vertex_len, sizeof(unsigned int));
-        infile.read((char*)&vertex, vertex_len);
+        vertex.resize(vertex_len);
+        infile.read(&vertex[0], vertex_len);
         // updating graph
         result.addVertex(vertex);
     }
-    for( int i = 0 ; i < num_edges ; i++) {
+    for(unsigned int i = 0 ; i < num_edges ; i++) {
         unsigned int v1_len;
         unsigned int v2_len;
         std::string v1;
         std::string v2;
         // reading src vertex
         infile.read((char*)&v1_len, sizeof(unsigned int));
-        infile.read((char*)&v1, v1_len);
+        v1.resize(v1_len);
+        infile.read(&v1[0], v1_len);
         // reading dst vertex
         infile.read((char*)&v2_len, sizeof(unsigned int));
-        infile.read((char*)&v2, v2_len);
+        v2.resize(v2_len);
+        infile.read(&v2[0], v2_len);
         // updating graph
         result.addEdge(v1,v2);
     }
@@ -153,6 +155,6 @@ bool Calc::isValidFileName(const std::string &file_name) {
         if(c == ',') {
             return false;
         }
-        return true;
     }
+        return true;
 }

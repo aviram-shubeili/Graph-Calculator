@@ -173,10 +173,12 @@ public:
  */
 bool isValidVertexName(const std::string &name);
 /**
- * TODO
+ *      create the product vertex string.
  * @param vertex_1
  * @param vertex_2
  * @return
+ * Exceptions:
+ *      std::bad_alloc if allocation problem.
  */
 std::string buildProductVertex(std::string vertex_1,std::string vertex_2);
 

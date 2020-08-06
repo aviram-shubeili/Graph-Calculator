@@ -87,7 +87,7 @@ public:
     static bool isValidGraphName(const std::string &g_name);
 
     /**
-     * TODO
+
      * @param g_name
      * @param file_name
      * Exceptions:
@@ -99,7 +99,6 @@ public:
     void save(const std::string &g_name, const std::string &file_name);
 
     /**
-     * TODO
      * @param file_name
      * @return
      * Exceptions:

@@ -8,8 +8,6 @@ using std::string;
 
 Graph::Graph(const std::string &data) {
 
-    // TODO fix so | is optional in a graph with no edges
-
     // data is not at the format of { ..  .. }
     if(not (startsWith(data, "{") and endsWith(data, "}")) ) {
         throw InvalidGraphData();
@@ -171,6 +169,9 @@ string Graph::getString() const {
 }
 
 void Graph::addVertex(std::string &vertex) {
+    if(vertex.empty()) {
+        IllegalVertexName();
+    }
     vertex = trim(vertex);
     if(!isValidVertexName(vertex)) {
         throw IllegalVertexName();
@@ -201,6 +202,9 @@ void Graph::addEdge(std::string &src, std::string &dest) {
 }
 
 void Graph::addAllVertices(const string &s_vertices, std::set<std::string> &dst_set) {
+    if(s_vertices.empty()) {
+        return;
+    }
     string cur_vertex;
     bool ended_prop = true;
     for(char c : s_vertices) {
@@ -286,7 +290,6 @@ std::set<pairs> Graph::getEdges() {
     return edges;
 }
 
-// TODO
 bool isValidVertexName(const string &name) {
     if(name.empty()) {
         return false;

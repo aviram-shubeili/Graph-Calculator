@@ -18,6 +18,8 @@
 #define START_OF_LINE 0
 #define PRINT_LEN 6
 #define DELETE_LEN 7
+#define SAVE_LEN 5
+#define LOAD_LEN 5
 #define WITHOUT_COMPLEMENT 1
 
 /**
@@ -35,7 +37,7 @@ void startCalc(std::istream& input, std::ostream &output, WorkMode mode);
  *      InvalidGraphName() if the operator is at the start of str.
  *
  */
-int findBinOperPos(const std::string &str, char& oper);
+size_t findBinOperPos(const std::string &str, char& oper);
 
 /**
  * return true if c is a binary operator (+ / - / * / ^ )
@@ -43,4 +45,15 @@ int findBinOperPos(const std::string &str, char& oper);
  */
 bool isBinaryOper(char c);
 
+/**
+ *      breaks down string to graph name and file name and initiate the save function.
+ * @param s_save
+ * Exceptions:
+ *      CommandNotInFormat()
+ *      InvalidGraphName()
+ *      InvalidFileName()
+ *      out_of_range() if one of the saved_graphs not exist
+ *      OpenFileError()
+ */
+void initSave(const std::string &s_save, Calc &calc);
 #endif //MTM_FINALPROJECT_GRAPHCALC_H

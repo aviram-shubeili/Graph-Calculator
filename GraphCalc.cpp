@@ -6,6 +6,8 @@
 #include "Auxiliaries.h"
 #include "Calc.h"
 
+
+
 using std::istream;
 using std::ostream;
 using std::ifstream;
@@ -15,7 +17,6 @@ using std::cin;
 using std::cout;
 using std::string;
 using std::shared_ptr;
-
 
 
 
@@ -68,7 +69,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             }
 
                 // ****************** printing ******************
-            else if (startsWith(current_line, "getString(")) {
+            else if (startsWith(current_line, "print(")) {
                 string to_print = current_line.substr(PRINT_LEN);
                 // doesnt end with )
                 if (to_print.substr(to_print.length() - 1) != ")") {
@@ -93,11 +94,25 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                     calc.erase(to_delete);
                 }
             }
+                // ****************** saving ******************
+            else if (startsWith(current_line, "save(")) {
+                string to_save = current_line.substr(SAVE_LEN);
+                // doesnt end with )
+                if (to_save.substr(to_save.length() - 1) != ")") {
+                    throw CommandNotInFormat();
+                }
+                else {
+                    // deleting ')' character
+                    to_save.pop_back();
+                    to_save = trim(to_save);
+                    initSave(to_save,calc);
+                }
+            }
                 // ******************* starts with a Graph Name ************
             else {
                 string dest_g;
                 string src_g;
-                size_t end_of_dest = current_line.find("=");
+                size_t end_of_dest = current_line.find('=');
                 if (end_of_dest == string::npos) {
                     throw NoAssignmentOp();
                 }
@@ -105,8 +120,22 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 src_g = current_line.substr(end_of_dest + 1);
                 src_g = trim(src_g);
 
+                // loading a graph from binary file
+                if(startsWith(src_g,"load(")) {
+                    string file_name = src_g.substr(LOAD_LEN);
+                    if (file_name.substr(file_name.length() - 1) != ")") {
+                        throw CommandNotInFormat();
+                    } else {
+                        // deleting ')' character
+                        file_name.pop_back();
+                        file_name = trim(file_name);
+
+                        calc.addGraph(dest_g,calc.load(file_name));
+                    }
+
+                }
                 // *** init a graph ***
-                if (startsWith(src_g, "{")) {
+                else if (startsWith(src_g, "{")) {
                     calc.addGraph(dest_g, Graph(src_g));
                 }
                     // !Graph
@@ -139,6 +168,9 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
         catch (CommandNotInFormat& e) {
             output << e.what();
         }
+        catch (InvalidFileName& e) {
+            output << e.what();
+        }
         catch (std::out_of_range& e) {
             output << "Error: Graph not found. \n";
         }
@@ -149,6 +181,9 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             output << e.what();
         }
         catch (GraphExceptions& e) {
+            output << e.what();
+        }
+        catch (CalcExceptions& e) {
             output << e.what();
         }
         catch (std::bad_alloc& e) {
@@ -164,6 +199,21 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
 
     }
 }
+
+void initSave(const string &s_save, Calc &calc) {
+    size_t sep_pos = s_save.find(",");
+    if(sep_pos == string::npos) {
+        throw CommandNotInFormat();
+    }
+    string g_name = s_save.substr(0,sep_pos);
+    string file_name = s_save.substr(sep_pos + 1);
+    g_name = trim(g_name);
+    file_name = trim(file_name);
+    calc.save(g_name,file_name);
+
+
+}
+
 /**
  * returns the position of the first operand in str and stores it in operand
  * @param str
@@ -172,7 +222,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
  * Exceptions:
  *      InvalidGraphName() if operand pos = 0
  */
-int findBinOperPos(const string &str, char& oper) {
+size_t findBinOperPos(const string &str, char& oper) {
     size_t pos = string::npos;
     for(char c : str) {
         if(isBinaryOper(c)) {

@@ -33,5 +33,11 @@ endWithOper = g1 +
 endWithOper2 = g1+
 selfLoop = { y1, y2 | <y1,y1> , <y2,y1> }
 ParallelEdge = { y1, y2 | <y2,y1> , <y2,y1> }
+save(NoEdge, noedgefile)
+readNoEdge = load(noedgefile)
+save(EmptyGraph, emptygraphfile)
+readEmpty = load(emptygraphfile)
 quit
 this shouldnt matter
+
+## 10 of the lines above quit shouldnt throw an Error!

@@ -26,3 +26,7 @@ const char *GraphNotFound::what() const noexcept {
 const char *InvalidFileName::what() const noexcept {
     return "Error: Invalid file name. \n";
 }
+
+const char *BinaryFileError::what() const noexcept {
+    return "Error: couldn't open binary file \n";
+}
