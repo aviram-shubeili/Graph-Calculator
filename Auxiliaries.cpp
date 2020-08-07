@@ -10,7 +10,6 @@ bool startsWith(const std::string& line, const std::string& starter) {
 }
 
 bool endsWith(const std::string& line, const std::string& ender) {
-    //  TODO test if this true
     return line.rfind(ender) == line.length() - ender.length();
 }
 

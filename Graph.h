@@ -30,7 +30,7 @@ public:
      *      IllegalVertexName() - if one of the vertices`s name is invalid.
      *      std::bad_alloc() - if allocation problem
      */
-    Graph(const std::string& data);    //TODO :  should it be explicit?
+    Graph(const std::string& data);
     /**
      *
      * @param other
@@ -41,7 +41,7 @@ public:
      *  Exceptions:
      *       std::bad_alloc() - if allocation problem
      */
-    Graph(const Graph& other);    //TODO :  should it be explicit?
+    Graph(const Graph& other);
 
     /**
      * Assignment operator - current graph will be overridden
@@ -64,7 +64,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator+(const Graph& g2) const;
-    //TODO : bi-direction operator +
+
 
     /**
      * create an intersection of 2 graphs
@@ -74,7 +74,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator^(const Graph& g2) const;
-    // TODO : bi-direction operator ^
+
 
     /**
      * creates the difference of this graph and g2
@@ -84,7 +84,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator-(const Graph& g2) const;
-    //TODO : bi-direction operator -
+
 
     /**
      *  creates the product of 2 graphs
@@ -94,7 +94,7 @@ public:
      *       std::bad_alloc() - if allocation problem
      */
     Graph operator*(const Graph& g2) const;
-    //TODO : bi-direction operator *
+
 
     /**
      * complement of graph

@@ -10,7 +10,7 @@
 class Calc {
     std::map<std::string,class Graph> saved_graphs;
 
-    friend Graph makeGraph(std::string data, Calc &calc);
+
 public:
     /**
      * Create a New Calc with empty map of saved_graphs
@@ -107,6 +107,8 @@ public:
      * @return
      */
     static bool isValidFileName(const std::string &file_name);
+
+    friend Graph makeGraph(std::string data, Calc &calc);
 };
 
 

@@ -111,7 +111,6 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                     to_save = to_save.substr(WITHOUT_OPEN_BRACKET);
                     // deleting ')' character
                     to_save.pop_back();
-                    // TODO should i trim this?
                     to_save = trim(to_save);
                     initSave(to_save,calc);
                 }
@@ -134,20 +133,8 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
 
 
         }
-        catch (CommandNotInFormat& e) {
-            output << e.what();
-        }
-        catch (InvalidFileName& e) {
-            output << e.what();
-        }
         catch (std::out_of_range& e) {
             output << "Error: Graph not found. \n";
-        }
-        catch (NoAssignmentOp& e) {
-            output << e.what();
-        }
-        catch (InvalidGraphName& e) {
-            output << e.what();
         }
         catch (GraphExceptions& e) {
             output << e.what();
@@ -177,7 +164,6 @@ void initSave(const string &s_save, Calc &calc) {
     string g_name = s_save.substr(0,sep_pos);
     string file_name = s_save.substr(sep_pos + 1);
     g_name = trim(g_name);
-    // TODO should we trim file name???
     file_name = trim(file_name);
     calc.save(makeGraph(g_name, calc), file_name);
 
@@ -223,7 +209,6 @@ Graph makeGraph(std::string data, Calc &calc) {
             file_name = file_name.substr(WITHOUT_OPEN_BRACKET);
             // deleting ')' character
             file_name.pop_back();
-            // TODO should i trim this?
             file_name = trim(file_name);
             return calc.load(file_name);
         }

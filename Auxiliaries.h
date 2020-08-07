@@ -21,7 +21,6 @@
 
 enum WorkMode {BATCH, SHELL};
 enum {PLUS='+',MINUS='-',MULT='*',INTER = '^' , COMPL = '!'};
-// TODO add to saved words ?
 const std::set<std::string> SAVED_WORDS = {
         "quit",
         "who",
