@@ -1,5 +1,9 @@
 g1 = { y1, y2 | <y1,y2> , <y2,y1> }
+print(g1)
 G1 = { Y1, Y2 | <Y1,Y2> , <Y2,Y1> }
+print(g1+G1)
+g3 = g1 + { Y1, Y2 | <Y1,Y2> , <Y2,Y1> }
+quit
 sameVertex = { y1, y1 | <y1,y2> , <y2,y1> }
 sameEdge = { y1, y2 | <y1,y2> , <y1,y2> }
 sameVertexAndEdge = { y1, y2, y1 | <y1,y2> , <y1,y2> }

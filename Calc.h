@@ -10,6 +10,7 @@
 class Calc {
     std::map<std::string,class Graph> saved_graphs;
 
+    friend Graph evaluate(std::string data, Calc &calc);
 public:
     /**
      * Create a New Calc with empty map of saved_graphs
