@@ -228,19 +228,16 @@ Graph makeGraph(std::string data, Calc &calc) {
             return calc.load(file_name);
         }
     }
-    bool complement = false;
-    string compl_data;
     // *************** need to complement ***************
     if(startsWith(data, "!")) {
-        complement = true;
+        string compl_data;
         compl_data = data.substr(WITHOUT_COMPLEMENT);
-        compl_data = trim(compl_data);
+        return !makeGraph(compl_data,calc);
     }
-    // if data is saved or data without the ! is saved (only one of them is true)
-    if(calc.saved_graphs.find(data) != calc.saved_graphs.end() or
-       calc.saved_graphs.find(compl_data) != calc.saved_graphs.end()) {
+    // if data is saved
+    if(calc.saved_graphs.find(data) != calc.saved_graphs.end()) {
 
-        return complement ? !calc.saved_graphs.at(compl_data) : calc.saved_graphs.at(data);
+        return calc.saved_graphs.at(data);
     }
     // it isnt a saved graph - lets try to make one.
     return Graph(data);
