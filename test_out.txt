@@ -1,34 +1,8 @@
-Error: Vertex already exists in graph. 
-Error: Edge already exists in graph. 
-Error: Vertex already exists in graph. 
-Error: Invalid graph data. 
-Error: Illegal vertex name. 
-Error: Illegal vertex name. 
-Error: Illegal vertex name. 
-Error: Illegal vertex name. 
-Error: Illegal vertex name. 
-Error: Illegal vertex name. 
-Error: Illegal vertex name. 
-Error: Vertex doesnt exist in graph. 
-Error: Invalid graph data. 
-Error: No Assignment operator given. 
-Error: No Assignment operator given. 
-Error: No Assignment operator given. 
-Error: Invalid graph name. 
-Error: Unformatted command. 
-Error: Invalid graph name. 
-Error: Invalid graph name. 
-Error: Invalid graph name. 
-Error: Invalid graph name. 
-Error: No Assignment operator given. 
-Error: No Assignment operator given. 
-Error: Invalid graph name. 
-Error: Invalid graph data. 
-Error: Invalid graph data. 
-Error: Self loop edge. 
-Error: Edge already exists in graph. 
+Y1
+Y2
+y1
+y2
 &
-&
-&
-&
-Error: Unformatted command. 
+Y1 Y2
+Y2 Y1
+y2 y1
