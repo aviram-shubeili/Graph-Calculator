@@ -16,34 +16,17 @@
 #define BATCH_MODE (argc == 3)
 #define SHELL_MODE (argc == 1)
 #define START_OF_LINE 0
-#define PRINT_LEN 6
-#define DELETE_LEN 7
-#define SAVE_LEN 5
-#define LOAD_LEN 5
+#define PRINT_LEN 5
+#define DELETE_LEN 6
+#define SAVE_LEN 4
+#define LOAD_LEN 4
 #define WITHOUT_COMPLEMENT 1
+#define WITHOUT_OPEN_BRACKET 1
 
 /**
  * This function is the Calculator's driver after the workmode is defined.
  */
 void startCalc(std::istream& input, std::ostream &output, WorkMode mode);
-
-/**
- * find the position of the first binary operator (+ / - / * / ^ ) and store the operator in oper
- * @param str
- * @param oper
- * @return  the position of the first binary operator
- *          string::npos if doesnt exist.
- * Exceptions:
- *      InvalidGraphName() if the operator is at the start of str.
- *
- */
-size_t findBinOperPos(const std::string &str, char& oper);
-
-/**
- * return true if c is a binary operator (+ / - / * / ^ )
- *        false otherwise.
- */
-bool isBinaryOper(char c);
 
 /**
  *      breaks down string to graph name and file name and initiate the save function.

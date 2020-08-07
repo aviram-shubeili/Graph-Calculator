@@ -10,7 +10,7 @@
 class Calc {
     std::map<std::string,class Graph> saved_graphs;
 
-    friend Graph evaluate(std::string data, Calc &calc);
+    friend Graph makeGraph(std::string data, Calc &calc);
 public:
     /**
      * Create a New Calc with empty map of saved_graphs
@@ -58,17 +58,6 @@ public:
      *      GraphNotFound() - if graph is not in saved in calc.
      */
     void erase(std::string to_delete);
-    /**
-     * receives 2 graph names and an oper and apply the operad on them
-     * @param g1_name
-     * @param oper
-     * @param g2_name
-     * @return the result of the oper
-     * Exceptions:
-     *      out_of_range() if one of the saved_graphs not exist
-     *      std::bad_alloc() if alloc problem
-     */
-    Graph applyOper(const std::string& g1_name, const char oper, const std::string& g2_name) const;
 
     /**
      * getString to os the names of all saved_graphs known to Calc.
@@ -89,7 +78,7 @@ public:
 
     /**
 
-     * @param g_name
+     * @param g
      * @param file_name
      * Exceptions:
      *      InvalidGraphName()
@@ -97,7 +86,7 @@ public:
      *      out_of_range() if one of the saved_graphs not exist
      *      OpenFileError()
      */
-    void save(const std::string &g_name, const std::string &file_name);
+    void save(Graph g, const std::string &file_name);
 
     /**
      * @param file_name

@@ -6,8 +6,6 @@
 #include "Auxiliaries.h"
 #include "Calc.h"
 
-
-
 using std::istream;
 using std::ostream;
 using std::ifstream;
@@ -44,39 +42,6 @@ int main(int argc, char* argv[]) {
     return 0;
 
 }
-Graph evaluate(std::string data, Calc &calc) {
-
-    for(size_t i = 0; i < data.length() ; i++ ) {
-
-        switch (data[i]) {
-            case PLUS:
-                return evaluate(data.substr(0, i), calc) +
-                       evaluate(data.substr(i + 1), calc);
-
-            case MINUS:
-                return evaluate(data.substr(0, i), calc) -
-                       evaluate(data.substr(i + 1), calc);
-
-
-            case MULT:
-                return evaluate(data.substr(0, i), calc) *
-                       evaluate(data.substr(i + 1), calc);
-
-            case INTER:
-                return evaluate(data.substr(0, i), calc) ^
-                       evaluate(data.substr(i + 1), calc);
-
-            case COMPL:
-                return !evaluate(data.substr(0, i), calc);
-
-        }
-    }
-    data = trim(data);
-    if(calc.saved_graphs.find(data) != calc.saved_graphs.end()) {
-        return calc.saved_graphs.at(data);
-    }
-    return Graph(data);
-}
 
 void startCalc(istream &input, ostream &output, WorkMode mode) {
 
@@ -102,41 +67,51 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             }
 
                 // ****************** printing ******************
-            else if (startsWith(current_line, "print(")) {
+            else if (startsWith(current_line, "print")) {
                 string to_print = current_line.substr(PRINT_LEN);
-                // doesnt end with )
-                if (to_print.substr(to_print.length() - 1) != ")") {
+                to_print = trim(to_print);
+                if (not (startsWith(to_print, "(") and endsWith(to_print, ")"))) {
                     throw CommandNotInFormat();
-                }
-                else {
+                } else {
+                    // deleting '(' character
+                    to_print = to_print.substr(WITHOUT_OPEN_BRACKET);
                     // deleting ')' character
                     to_print.pop_back();
-                    output << (evaluate(to_print,calc)).getString();
+                    to_print = trim(to_print);
+                    output << (makeGraph(to_print, calc)).getString();
                 }
             }
                 // ****************** deleting ******************
-            else if (startsWith(current_line, "delete(")) {
+            else if (startsWith(current_line, "delete")) {
                 string to_delete = current_line.substr(DELETE_LEN);
-                // doesnt end with )
-                if (to_delete.substr(to_delete.length() - 1) != ")") {
+                to_delete = trim(to_delete);
+                if (not (startsWith(to_delete, "(") and endsWith(to_delete, ")"))) {
                     throw CommandNotInFormat();
                 }
                 else {
+                    // deleting '(' character
+                    to_delete = to_delete.substr(WITHOUT_OPEN_BRACKET);
                     // deleting ')' character
                     to_delete.pop_back();
+                    to_delete = trim(to_delete);
                     calc.erase(to_delete);
                 }
             }
                 // ****************** saving ******************
-            else if (startsWith(current_line, "save(")) {
+            else if (startsWith(current_line, "save")) {
                 string to_save = current_line.substr(SAVE_LEN);
+                to_save = trim(to_save);
+
                 // doesnt end with )
-                if (to_save.substr(to_save.length() - 1) != ")") {
+                if (not (startsWith(to_save, "(") and endsWith(to_save, ")"))) {
                     throw CommandNotInFormat();
                 }
                 else {
+                    // deleting '(' character
+                    to_save = to_save.substr(WITHOUT_OPEN_BRACKET);
                     // deleting ')' character
                     to_save.pop_back();
+                    // TODO should i trim this?
                     to_save = trim(to_save);
                     initSave(to_save,calc);
                 }
@@ -153,62 +128,8 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 src_g = current_line.substr(end_of_dest + 1);
                 src_g = trim(src_g);
 
+                calc.addGraph(dest_g, makeGraph(src_g, calc));
 
-                calc.addGraph(dest_g, evaluate(src_g,calc));
-
-
-
-
-
-
-
-
-
-
-
-
-                // ********** loading a graph from binary file
-                if(startsWith(src_g,"load(")) {
-                    string file_name = src_g.substr(LOAD_LEN);
-                    if (file_name.substr(file_name.length() - 1) != ")") {
-                        throw CommandNotInFormat();
-                    } else {
-                        // deleting ')' character
-                        file_name.pop_back();
-                        file_name = trim(file_name);
-
-                        calc.addGraph(dest_g, calc.load(file_name));
-                    }
-
-
-                }
-                /*
-                // *** init a graph ***
-                else if (startsWith(src_g, "{")) {
-                }
-                    // !Graph
-                else if (startsWith(src_g, "!")) {
-                    calc.addGraph(dest_g, !calc.getGraph(src_g.substr(WITHOUT_COMPLEMENT)));
-
-                }
-                    // g1 <oper> g2
-                else {
-                    string g1, g2;
-                    char oper;
-                    size_t op_pos = findBinOperPos(src_g, oper);
-                    // there is no operand
-                    if (op_pos == string::npos) {
-                        calc.addGraph(dest_g, calc.getGraph(src_g));
-                    }
-                        // there is an operand
-                    else {
-                        g1 = src_g.substr(START_OF_LINE, op_pos);
-                        g2 = src_g.substr(op_pos + 1);
-                        calc.addGraph(dest_g, calc.applyOper(g1, oper, g2));
-                    }
-
-                }
-*/
             }
 
 
@@ -249,44 +170,79 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
 }
 
 void initSave(const string &s_save, Calc &calc) {
-    size_t sep_pos = s_save.find(",");
+    size_t sep_pos = s_save.find_last_of(",");
     if(sep_pos == string::npos) {
         throw CommandNotInFormat();
     }
     string g_name = s_save.substr(0,sep_pos);
     string file_name = s_save.substr(sep_pos + 1);
     g_name = trim(g_name);
+    // TODO should we trim file name???
     file_name = trim(file_name);
-    calc.save(g_name,file_name);
+    calc.save(makeGraph(g_name, calc), file_name);
 
 
 }
 
-/**
- * returns the position of the first operand in str and stores it in operand
- * @param str
- * @param operand
- * @return
- * Exceptions:
- *      InvalidGraphName() if operand pos = 0
- */
-size_t findBinOperPos(const string &str, char& oper) {
-    size_t pos = string::npos;
-    for(char c : str) {
-        if(isBinaryOper(c)) {
-            pos = str.find(c);
-            oper = c;
-            break;
+
+Graph makeGraph(std::string data, Calc &calc) {
+
+    for(int  i = data.length() - 1; i >= 0 ; i-- ) {
+
+        switch (data.at(i)) {
+            case PLUS:
+                return makeGraph(data.substr(0, i), calc) +
+                       makeGraph(data.substr(i + 1), calc);
+
+            case MINUS:
+                return makeGraph(data.substr(0, i), calc) -
+                       makeGraph(data.substr(i + 1), calc);
+
+
+            case MULT:
+                return makeGraph(data.substr(0, i), calc) *
+                       makeGraph(data.substr(i + 1), calc);
+
+            case INTER:
+                return makeGraph(data.substr(0, i), calc) ^
+                       makeGraph(data.substr(i + 1), calc);
+
+
         }
     }
-    if(pos == START_OF_LINE) {
-        throw InvalidGraphName();
+    data = trim(data);
+
+    // *************** loading a graph from binary file ***************
+    if(startsWith(data,"load")) {
+        string file_name = data.substr(LOAD_LEN);
+        file_name = trim(file_name);
+        if (not (startsWith(file_name, "(") and endsWith(file_name, ")"))) {
+            throw CommandNotInFormat();
+        } else {
+            // deleting '(' character
+            file_name = file_name.substr(WITHOUT_OPEN_BRACKET);
+            // deleting ')' character
+            file_name.pop_back();
+            // TODO should i trim this?
+            file_name = trim(file_name);
+            return calc.load(file_name);
+        }
     }
-    return pos;
-}
+    bool complement = false;
+    string compl_data;
+    // *************** need to complement ***************
+    if(startsWith(data, "!")) {
+        complement = true;
+        compl_data = data.substr(WITHOUT_COMPLEMENT);
+        compl_data = trim(compl_data);
+    }
+    // if data is saved or data without the ! is saved (only one of them is true)
+    if(calc.saved_graphs.find(data) != calc.saved_graphs.end() or
+       calc.saved_graphs.find(compl_data) != calc.saved_graphs.end()) {
 
-bool isBinaryOper(char c) {
-    return c == '+' or c == '-' or c == '^' or c == '*';
+        return complement ? !calc.saved_graphs.at(compl_data) : calc.saved_graphs.at(data);
+    }
+    // it isnt a saved graph - lets try to make one.
+    return Graph(data);
 }
-
 

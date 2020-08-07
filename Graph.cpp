@@ -60,7 +60,7 @@ Graph Graph::operator+(const Graph &g2) const {
 
 
 Graph Graph::operator^(const Graph &g2) const {
-    Graph result("{ | }");
+    Graph result;
 
     std::set_intersection(vertices.begin(),vertices.end(),
                           g2.vertices.begin(), g2.vertices.end(),
@@ -74,7 +74,7 @@ Graph Graph::operator^(const Graph &g2) const {
 }
 
 Graph Graph::operator-(const Graph &g2) const {
-    Graph result("{ | }");
+    Graph result;
     std::set_difference(vertices.begin(),vertices.end(),
                         g2.vertices.begin(),g2.vertices.end(),
                         std::inserter(result.vertices,result.vertices.begin()));
@@ -95,7 +95,7 @@ Graph Graph::operator-(const Graph &g2) const {
 }
 
 Graph Graph::operator*(const Graph &g2) const {
-    Graph result("{ | }");
+    Graph result;
 
     // Adding the product Vertices
     for(const string& vertex_1 : vertices) {
@@ -128,7 +128,7 @@ Graph Graph::operator*(const Graph &g2) const {
 
 Graph Graph::operator!() const {
     // Creating the Full simple Graph.
-    Graph full_simple_graph("{ | }");
+    Graph full_simple_graph;
     // Vertices
     full_simple_graph.vertices = vertices;
 
@@ -147,7 +147,7 @@ Graph Graph::operator!() const {
     }
 
     // Creating the Complement Graph.
-    Graph result("{ | }");
+    Graph result;
     result.vertices = vertices;
     std::set_difference(full_simple_graph.edges.begin(),full_simple_graph.edges.end(),
                         edges.begin(),edges.end(),
@@ -170,7 +170,7 @@ string Graph::getString() const {
 
 void Graph::addVertex(std::string &vertex) {
     if(vertex.empty()) {
-        IllegalVertexName();
+        throw IllegalVertexName();
     }
     vertex = trim(vertex);
     if(!isValidVertexName(vertex)) {
@@ -182,6 +182,7 @@ void Graph::addVertex(std::string &vertex) {
     }
     vertices.insert(vertex);
 }
+
 
 void Graph::addEdge(std::string &src, std::string &dest) {
     src = trim(src);

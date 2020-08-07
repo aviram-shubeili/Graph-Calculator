@@ -22,29 +22,6 @@ void Calc::reset() {
     saved_graphs.clear();
 }
 
-Graph Calc::applyOper(const std::string &g1_name, const char oper, const std::string &g2_name) const {
-    // Exceptions may be thrown here
-    Graph g1 = getGraph(g1_name);
-    Graph g2 = getGraph(g2_name);
-
-    switch (oper) {
-        case '+':
-            return g1 + g2;
-        case '^':
-            return g1 ^ g2;
-        case '-':
-            return g1 - g2;
-        case '*':
-            return g1 * g2;
-
-        default:
-            // Should never get here.
-            assert(false);
-            return Graph("");
-    }
-
-}
-
 std::ostream &operator<<(std::ostream &os, const Calc &to_print) {
     for(const std::pair<std::string, class Graph> element : to_print.saved_graphs) {
         os << element.first << std::endl;
@@ -73,14 +50,11 @@ void Calc::erase(std::string to_delete) {
     }
 }
 
-void Calc::save(const std::string &g_name, const std::string &file_name) {
-    if(not isValidGraphName(g_name)) {
-        throw InvalidGraphName();
-    }
+void Calc::save(Graph g, const std::string &file_name) {
+
     if(not isValidFileName(file_name)) {
         throw InvalidFileName();
     }
-    Graph g = saved_graphs.at(g_name);
     std::set<std::string> vertices = g.getVertices();
     std::set<pairs> edges = g.getEdges();
     unsigned int num_vertices = vertices.size();
@@ -151,8 +125,11 @@ Graph Calc::load(const std::string &file_name) {
     return result;
 }
 bool Calc::isValidFileName(const std::string &file_name) {
+    if(file_name.empty()) {
+        return false;
+    }
     for(char c : file_name) {
-        if(c == ',') {
+        if(c == ',' or c == '(' or c == ')') {
             return false;
         }
     }

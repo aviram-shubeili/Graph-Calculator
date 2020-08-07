@@ -1,5 +1,5 @@
-g1 = { y1, y2 | <y1,y2> , <y2,y1> }
-G1 = { Y1, Y2 | <Y1,Y2> , <Y2,Y1> }
+y1 = { y1, y2 | <y1,y2> , <y2,y1> }
+Y1 = { Y1, Y2 | <Y1,Y2> , <Y2,Y1> }
 sameVertex = { y1, y1 | <y1,y2> , <y2,y1> }
 sameEdge = { y1, y2 | <y1,y2> , <y1,y2> }
 sameVertexAndEdge = { y1, y2, y1 | <y1,y2> , <y1,y2> }
@@ -18,26 +18,39 @@ NoEdge ={ y2, y1 | }
 NoEdge2 ={ y2, y1 }
 OpenEdge = { x1 , x2 | <x1,x2>, <x2,x1> , < }
 next line is a graph name with no commands
-g1
+y1
 quit this shouldnt quit
 quit = { y1, y2 | <y1,y2> , <y2,y1> }
 delete = { y1, y2 | <y1,y2> , <y2,y1> }
 who = { y1, y2 | <y1,y2> , <y2,y1> }
 getString = { y1, y2 | <y1,y2> , <y2,y1> }
 reset = { y1, y2 | <y1,y2> , <y2,y1> }
-+g1 = g1
++y1 = y1
 *quit
 -stam
-/stam2 = g1
-endWithOper = g1 +
-endWithOper2 = g1+
+/stam2 = y1
+endWithOper = y1 +
+endWithOper2 = y1+
 selfLoop = { y1, y2 | <y1,y1> , <y2,y1> }
 ParallelEdge = { y1, y2 | <y2,y1> , <y2,y1> }
 save(NoEdge, noedgefile)
 readNoEdge = load(noedgefile)
 save(EmptyGraph, emptygraphfile)
 readEmpty = load(emptygraphfile)
+print(EmptyGraph)
+print(EmptyGraph)
+print(EmptyGraph)
+print(EmptyGraph)
+save({ y1, y2 | <y1,y2> , <y2,y1> } , rarefile)
+save(y1, y1file)
+save(Y1,Y1file)
+save(y1+Y1,plusfile)
+save(!Y1,ComplementFile)
+save (Y1,Y1file)
+print (load (Y1file)
 quit
 this shouldnt matter
 
-## 10 of the lines above quit shouldnt throw an Error!
+
+## 20 of the lines above quit should NOT throw an Error!
+        ## Should have 34 lines
