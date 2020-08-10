@@ -9,9 +9,11 @@ bool startsWith(const std::string& line, const std::string& starter) {
     return line.find(starter) == START_OF_LINE;
 }
 
-bool endsWith(const std::string& line, const std::string& ender) {
+bool endsWith(const std::string &line, const std::string &ender) {
     return line.rfind(ender) == line.length() - ender.length();
 }
+
+
 
 std::string rtrim(std::string &str) {
     if(str.empty()) {

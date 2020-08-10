@@ -18,20 +18,33 @@
 #include "Calc.h"
 #include "GraphExceptions.h"
 #include "CalcExceptions.h"
+#define PRINT_LEN 5
+#define DELETE_LEN 6
+#define SAVE_LEN 4
+#define LOAD_LEN 4
 
 enum WorkMode {BATCH, SHELL};
-enum {PLUS='+',MINUS='-',MULT='*',INTER = '^' , COMPL = '!'};
+enum Commands {DELETE, SAVE, LOAD, PRINT};
+enum {PLUS='+',MINUS='-',MULT='*',INTER = '^' };
+typedef  std::pair<const std::string, const unsigned int>  name_len_pair;
+
+const std::map<Commands,const name_len_pair> enumToString = {
+        {DELETE,std::make_pair("delete",DELETE_LEN)},
+        {SAVE, std::make_pair("save",SAVE_LEN)},
+        {LOAD, std::make_pair("load",LOAD_LEN)},
+        {PRINT,std::make_pair("print",PRINT_LEN) }
+};
+
+
 const std::set<std::string> SAVED_WORDS = {
         "quit",
         "who",
-        "getString",
+        "print",
         "reset",
         "delete",
         "save",
         "load"
-
 };
-
 
 /**
  * check if line starts with substring starter

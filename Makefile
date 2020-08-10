@@ -17,28 +17,28 @@ $(EXEC): $(OBJS)
 
 Auxiliaries.o: Auxiliaries.cpp GraphCalc.h Graph.h Auxiliaries.h Calc.h \
  GraphExceptions.h Exceptions.h CalcExceptions.h
-	$(CXX)  -fPIC -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o Auxiliaries.o
+	$(CXX)  -fPIC -c $(DEBUG_FLAG) $(COMP_FLAG) Auxiliaries.cpp -o Auxiliaries.o
 
 Calc.o: Calc.cpp Calc.h Auxiliaries.h Graph.h GraphExceptions.h \
  Exceptions.h CalcExceptions.h
-	$(CXX) -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o Calc.o
+	$(CXX) -c $(DEBUG_FLAG) $(COMP_FLAG) Calc.cpp -o Calc.o
 
 CalcExceptions.o: CalcExceptions.cpp CalcExceptions.h Exceptions.h
-	$(CXX) -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o CalcExceptions.o
+	$(CXX) -c $(DEBUG_FLAG) $(COMP_FLAG) CalcExceptions.cpp -o CalcExceptions.o
 
 Exceptions.o: Exceptions.cpp Exceptions.h
-	$(CXX) -fPIC  -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o Exceptions.o
+	$(CXX) -fPIC  -c $(DEBUG_FLAG) $(COMP_FLAG) Exceptions.cpp -o Exceptions.o
 
 GraphCalc.o: GraphCalc.cpp GraphCalc.h Graph.h Auxiliaries.h Calc.h \
  GraphExceptions.h Exceptions.h CalcExceptions.h
-	$(CXX) -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o GraphCalc.o
+	$(CXX) -c $(DEBUG_FLAG) $(COMP_FLAG) GraphCalc.cpp -o GraphCalc.o
 
 Graph.o: Graph.cpp Graph.h Auxiliaries.h Calc.h GraphExceptions.h \
 Exceptions.h CalcExceptions.h
-	$(CXX) -fPIC  -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o Graph.o
+	$(CXX) -fPIC  -c $(DEBUG_FLAG) $(COMP_FLAG) Graph.cpp -o Graph.o
 
 GraphExceptions.o: GraphExceptions.cpp GraphExceptions.h Exceptions.h
-	$(CXX)   -fPIC -c $(DEBUG_FLAG) $(COMP_FLAG) $^ -o GraphExceptions.o
+	$(CXX)   -fPIC -c $(DEBUG_FLAG) $(COMP_FLAG) GraphExceptions.cpp -o GraphExceptions.o
 
 PyInterface.o: PyInterface.cpp PyInterface.h Auxiliaries.h Graph.h Calc.h \
  GraphExceptions.h Exceptions.h CalcExceptions.h

@@ -1,5 +1,6 @@
 y1 = { y1, y2 | <y1,y2> , <y2,y1> }
 Y1 = { Y1, Y2 | <Y1,Y2> , <Y2,Y1> }
+2startWithNumber = Y1
 sameVertex = { y1, y1 | <y1,y2> , <y2,y1> }
 sameEdge = { y1, y2 | <y1,y2> , <y1,y2> }
 sameVertexAndEdge = { y1, y2, y1 | <y1,y2> , <y1,y2> }
@@ -22,8 +23,10 @@ y1
 quit this shouldnt quit
 quit = { y1, y2 | <y1,y2> , <y2,y1> }
 delete = { y1, y2 | <y1,y2> , <y2,y1> }
+print = { y1, y2 | <y1,y2> , <y2,y1> }
+load = { y1, y2 | <y1,y2> , <y2,y1> }
+save = { y1, y2 | <y1,y2> , <y2,y1> }
 who = { y1, y2 | <y1,y2> , <y2,y1> }
-getString = { y1, y2 | <y1,y2> , <y2,y1> }
 reset = { y1, y2 | <y1,y2> , <y2,y1> }
 +y1 = y1
 *quit
@@ -37,10 +40,6 @@ save(NoEdge, noedgefile)
 readNoEdge = load(noedgefile)
 save(EmptyGraph, emptygraphfile)
 readEmpty = load(emptygraphfile)
-print(EmptyGraph)
-print(EmptyGraph)
-print(EmptyGraph)
-print(EmptyGraph)
 save({ y1, y2 | <y1,y2> , <y2,y1> } , rarefile)
 save(y1, y1file)
 save(Y1,Y1file)
@@ -48,9 +47,38 @@ save(y1+Y1,plusfile)
 save(!Y1,ComplementFile)
 save (Y1,Y1file)
 print (load (Y1file)
+deletee = y1
+savee = y1
+printt = y1
+loadd = y1
+printt(y1)
+endsWithBinaryOp = y1 + Y1 *
+startsWithBinaryOp = + y1 + Y1
+endsWithComplement = y1!
+endsWithComplement2 = y1 !
+delete(notExistGraph)
+delete(Y1)
+Y1isNotHereAnyMore = Y1
+reset
+who
+print(!{ y1, y2 | <y1,y2> , <y2,y1> })
+print(!{ y1, y2 | <y1,y2> , <y2,y1> } !s)
+print(!load(Y1file) * { y1, y2 | <y1,y2> , <y2,y1> })
+FULLofTHREE = { x,y,z | <x,y> , <x,z> , <y,x> , <y,z> , <z,x> }
+G1 = { x,y,z | <x,y> , <x,z> , <y,x> , <y,z>   }
+G2 = { x,y,z |   <y,x> , <y,z> , <z,x> , <z,y> }
+G3 = { x,y,z | <x,y> , <x,z> , <z,x> , <z,y> }
+G4NoX = { y,z | <y,z> , <z,y> }
+who
+OperMINUS = { x, y | } - { z, y | <y,z> , <z,y> }
+OperMINUS = { x, y | } - { z, y | <y,z> , <z,y> }
+print(FULLofTHREE * FULLofTHREE)
+print(FULLofTHREE ^ G1)
+print(FULLofTHREE + G1)
+print(G1 - G4NoX)
 quit
 this shouldnt matter
 
 
-## 20 of the lines above quit should NOT throw an Error!
-        ## Should have 34 lines
+
+        ## output Should have 187 lines

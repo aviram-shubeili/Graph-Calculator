@@ -51,6 +51,9 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
         output << "Gcalc>";
     }
     while (std::getline(input, current_line)) {
+#ifndef NDEBUG
+        output << "**********  " << current_line << "   **********" << std::endl;
+#endif
         try {
             current_line = trim(current_line);
             // ****************** who ******************
@@ -67,7 +70,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             }
 
                 // ****************** printing ******************
-            else if (startsWith(current_line, "print")) {
+            else if (isACommand(current_line,PRINT)) {
                 string to_print = current_line.substr(PRINT_LEN);
                 to_print = trim(to_print);
                 if (not (startsWith(to_print, "(") and endsWith(to_print, ")"))) {
@@ -82,27 +85,29 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
                 }
             }
                 // ****************** deleting ******************
-            else if (startsWith(current_line, "delete")) {
-                string to_delete = current_line.substr(DELETE_LEN);
-                to_delete = trim(to_delete);
-                if (not (startsWith(to_delete, "(") and endsWith(to_delete, ")"))) {
-                    throw CommandNotInFormat();
-                }
-                else {
-                    // deleting '(' character
-                    to_delete = to_delete.substr(WITHOUT_OPEN_BRACKET);
-                    // deleting ')' character
-                    to_delete.pop_back();
+                // TODO stopped here!!
+            else if (isACommand(current_line,DELETE)) {
+
+                    string to_delete = current_line.substr(DELETE_LEN);
                     to_delete = trim(to_delete);
-                    calc.erase(to_delete);
-                }
+                    if (not(startsWith(to_delete, "(") and endsWith(to_delete, ")"))) {
+                        throw CommandNotInFormat();
+                    } else {
+                        // deleting '(' character
+                        to_delete = to_delete.substr(WITHOUT_OPEN_BRACKET);
+                        // deleting ')' character
+                        to_delete.pop_back();
+                        to_delete = trim(to_delete);
+                        calc.erase(to_delete);
+                    }
+
             }
                 // ****************** saving ******************
-            else if (startsWith(current_line, "save")) {
+            else if (isACommand(current_line,SAVE)) {
                 string to_save = current_line.substr(SAVE_LEN);
                 to_save = trim(to_save);
 
-                // doesnt end with )
+                // doesnt begin with ( or doesnt end with )
                 if (not (startsWith(to_save, "(") and endsWith(to_save, ")"))) {
                     throw CommandNotInFormat();
                 }
@@ -170,6 +175,12 @@ void initSave(const string &s_save, Calc &calc) {
 
 }
 
+bool isACommand(std::string line, Commands command) {
+
+    return startsWith(line, enumToString.at(command).first) and
+           line.length() >  enumToString.at(command).second and
+           (line[enumToString.at(command).second] == ' ' or line[enumToString.at(command).second] == '(');
+}
 
 Graph makeGraph(std::string data, Calc &calc) {
 
@@ -199,7 +210,7 @@ Graph makeGraph(std::string data, Calc &calc) {
     data = trim(data);
 
     // *************** loading a graph from binary file ***************
-    if(startsWith(data,"load")) {
+    if(isACommand(data, LOAD)) {
         string file_name = data.substr(LOAD_LEN);
         file_name = trim(file_name);
         if (not (startsWith(file_name, "(") and endsWith(file_name, ")"))) {

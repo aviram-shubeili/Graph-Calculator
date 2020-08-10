@@ -1,3 +1,4 @@
+Error: Invalid graph name. 
 Error: Vertex already exists in graph. 
 Error: Edge already exists in graph. 
 Error: Vertex already exists in graph. 
@@ -16,7 +17,9 @@ Error: No Assignment operator given.
 Error: No Assignment operator given. 
 Error: Invalid graph name. 
 Error: Unformatted command. 
+Error: Unformatted command. 
 Error: Invalid graph name. 
+Error: Unformatted command. 
 Error: Invalid graph name. 
 Error: Invalid graph name. 
 Error: Invalid graph name. 
@@ -27,8 +30,79 @@ Error: Invalid graph data.
 Error: Invalid graph data. 
 Error: Self loop edge. 
 Error: Edge already exists in graph. 
-&
-&
-&
-&
 Error: Unformatted command. 
+Error: No Assignment operator given. 
+Error: Invalid graph data. 
+Error: Invalid graph data. 
+Error: Invalid graph data. 
+Error: Invalid graph data. 
+Error: Graph not found. 
+Error: Invalid graph data. 
+y1
+y2
+$
+Error: Invalid graph data. 
+[Y1;y1]
+[Y1;y2]
+[Y2;y1]
+[Y2;y2]
+$
+FULLofTHREE
+G1
+G2
+G3
+G4NoX
+[x;x]
+[x;y]
+[x;z]
+[y;x]
+[y;y]
+[y;z]
+[z;x]
+[z;y]
+[z;z]
+$
+[x;x] [y;y]
+[x;x] [y;z]
+[x;x] [z;y]
+[x;x] [z;z]
+[x;y] [y;x]
+[x;y] [y;z]
+[x;y] [z;x]
+[x;y] [z;z]
+[x;z] [y;x]
+[x;z] [z;x]
+[y;x] [x;y]
+[y;x] [x;z]
+[y;x] [z;y]
+[y;x] [z;z]
+[y;y] [x;x]
+[y;y] [x;z]
+[y;y] [z;x]
+[y;y] [z;z]
+[y;z] [x;x]
+[y;z] [z;x]
+[z;x] [x;y]
+[z;x] [x;z]
+[z;y] [x;x]
+[z;y] [x;z]
+[z;z] [x;x]
+x
+y
+z
+$
+x y
+x z
+y x
+y z
+x
+y
+z
+$
+x y
+x z
+y x
+y z
+z x
+x
+$

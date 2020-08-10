@@ -161,7 +161,7 @@ string Graph::getString() const {
     for(const string& vertex : vertices) {
         (result += vertex) += "\n";
     }
-    result += "&\n";
+    result += "$\n";
     for(const pairs& edge : edges) {
         (((result +=edge.first) +=" ") += edge.second) += "\n";
     }

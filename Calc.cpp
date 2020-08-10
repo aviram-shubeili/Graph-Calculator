@@ -29,17 +29,25 @@ std::ostream &operator<<(std::ostream &os, const Calc &to_print) {
     return os;
 }
 bool Calc::isValidGraphName(const std::string &g_name) {
+    // Graph name is empty
+    if(g_name.empty()) {
+        return false;
+    }
+    // Graph name doesnt start with a letter
     if(not isalpha(g_name[0])) {
         return false;
     }
+    // Graph name contains a NOT alphanumeric character
     for(char c : g_name) {
         if(not isalnum(c)) {
             return false;
         }
     }
+    // Graph name is a saved word
     if(SAVED_WORDS.find(g_name) != SAVED_WORDS.end()) {
         return false;
     }
+
     return true;
 
 }

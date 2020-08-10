@@ -7,7 +7,7 @@
 graph_ptr create() {
     graph_ptr g;
     try {
-         g = new Graph();
+         g = new Graph() ;
     }
     catch (std::bad_alloc& e) {
 

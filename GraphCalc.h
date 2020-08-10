@@ -16,10 +16,7 @@
 #define BATCH_MODE (argc == 3)
 #define SHELL_MODE (argc == 1)
 #define START_OF_LINE 0
-#define PRINT_LEN 5
-#define DELETE_LEN 6
-#define SAVE_LEN 4
-#define LOAD_LEN 4
+
 #define WITHOUT_COMPLEMENT 1
 #define WITHOUT_OPEN_BRACKET 1
 
@@ -39,4 +36,7 @@ void startCalc(std::istream& input, std::ostream &output, WorkMode mode);
  *      OpenFileError()
  */
 void initSave(const std::string &s_save, Calc &calc);
+
+bool isACommand(std::string line, Commands command);
 #endif //MTM_FINALPROJECT_GRAPHCALC_H
+
