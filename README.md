@@ -1,2 +1,2 @@
-# mtm-FinalProject
-mtm course final project
+# mtm Course (234124) Final Project
+A Graph Calculator
