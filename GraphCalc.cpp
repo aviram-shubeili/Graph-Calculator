@@ -48,7 +48,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
     Calc calc;
     string current_line;
     if(mode == SHELL) {
-        output << "Gcalc>";
+        output << "Gcalc> ";
     }
     while (std::getline(input, current_line)) {
 #ifndef NDEBUG
@@ -155,7 +155,7 @@ void startCalc(istream &input, ostream &output, WorkMode mode) {
             cout << "Error: Unknown Error Occurred \n" ;
         }
         if (mode == SHELL) {
-            output << "Gcalc>";
+            output << "Gcalc> ";
         }
 
     }

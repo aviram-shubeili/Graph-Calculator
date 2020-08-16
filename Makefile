@@ -48,6 +48,10 @@ libgraph.a: $(LIB_OBJS)
 	ar -rs $@ $^
 
 swig: libgraph.a
+	swig -python -o graph_wrap.cxx graph.i
+	$(CXX) -std=c++11 -DNDEBUG --pedantic-errors -Wall -Werror -I/usr/local/include/python3.6m -fPIC -shared graph_wrap.cxx libgraph.a -o _graph.so
+
+swigc++: libgraph.a
 	swig -c++ -python -o graph_wrap.cxx graph.i
 	$(CXX) -std=c++11 -DNDEBUG --pedantic-errors -Wall -Werror -I/usr/local/include/python3.6m -fPIC -shared graph_wrap.cxx libgraph.a -o _graph.so
 

@@ -25,13 +25,14 @@ void destroy(graph_ptr g) {
     delete g;
 }
 
-graph_ptr addVertex(graph_ptr g, std::string v) {
+graph_ptr addVertex(graph_ptr g, const char *v) {
     if(g == nullptr) {
         std::cout << "Error: I dont know what you sent me, but its not a Graph."<< std::endl;
         return nullptr;
     }
     try {
-        g->addVertex(v);
+        std::string s_v = v;
+        g->addVertex(s_v);
     }
         // IllegalVertexName or VertexAlreadyExists
     catch (GraphExceptions& e) {
@@ -46,13 +47,15 @@ graph_ptr addVertex(graph_ptr g, std::string v) {
 }
 
 
-graph_ptr addEdge(graph_ptr g, std::string src, std::string dst) {
+graph_ptr addEdge(graph_ptr g, const char *src, const char *dst) {
     if(g == nullptr) {
         std::cout << "Error: I dont know what you sent me, but its not a Graph." << std::endl;
         return nullptr;
     }
     try {
-        g->addEdge(src,dst);
+    std::string s_src = src;
+    std::string s_dst = dst;
+        g->addEdge(s_src,s_dst);
     }
         // VertexNotExist / SelfLoop / EdgeAlreadyExists
     catch (GraphExceptions& e) {

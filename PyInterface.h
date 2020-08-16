@@ -13,9 +13,9 @@ graph_ptr create();
 
 void destroy(graph_ptr g);
 
-graph_ptr addVertex(graph_ptr g, std::string v);
+graph_ptr addVertex(graph_ptr g, const char *v);
 
-graph_ptr addEdge(graph_ptr g, std::string src, std::string dst);
+graph_ptr addEdge(graph_ptr g, const char *src, const char *dst);
 
 void disp(graph_ptr g);
 
